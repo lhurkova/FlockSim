@@ -19,6 +19,7 @@ public class BoidsAgent implements Agent {
     private int view = 90;
     private int minDistance = 50;
     private int minVelocity = 20;
+    private double maxAngle = Math.PI / 4;
     private Flock flock;
     
     public BoidsAgent(Point position, Point velocityVector, Flock flock) {
@@ -45,11 +46,18 @@ public class BoidsAgent implements Agent {
             double velocitySize = velocityVector.getSize();
             double alignmentSize = alignment.getSize();
             
-            velocityVector = velocityVector.add(cohesion).add(alignment).add(separation);
-            
-            velocityVector = velocityVector.changeSizeTo(Math.max(minVelocity,
+            Point newVelocityVector = velocityVector.add(cohesion).add(alignment).add(separation);
+            double orientedAngle = velocityVector.getOrientedAngle(newVelocityVector);
+            if (Math.abs(orientedAngle) > maxAngle) {
+                if (orientedAngle > 0) {
+                    newVelocityVector = velocityVector.getVectorTurnedBy(maxAngle);
+                } else {
+                    newVelocityVector = velocityVector.getVectorTurnedBy(-maxAngle);
+                }
+            }
+            newVelocityVector = newVelocityVector.changeSizeTo(Math.max(minVelocity,
                 ((10 - 1) * velocitySize + alignmentSize) / 10));
-            
+            velocityVector = newVelocityVector;
         }
         position = position.add(velocityVector);
         position = flock.normalizePosition(position);
@@ -79,7 +87,7 @@ public class BoidsAgent implements Agent {
             Point distanceVector = position.getDistanceVector(neighbour);
             double distance = distanceVector.getSize();
             if (distance > 0 && distance < minDistance) {
-                Point separationVector = distanceVector.getOppositeVector().changeSizeTo(15/distance);
+                Point separationVector = distanceVector.getOppositeVector().changeSizeTo(15);
                 separationVectors.add(separationVector);
             }
         }

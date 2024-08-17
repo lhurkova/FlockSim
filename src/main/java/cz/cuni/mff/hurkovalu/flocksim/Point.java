@@ -73,6 +73,26 @@ public class Point {
         return new Point(y, -x, 0);
     }
     
+    public Point getVectorTurnedBy(double angle) {
+        if (z != 0) {
+            throw new IllegalArgumentException("Only applicable on 2D vectors");
+        }
+        double sin = Math.sin(angle);
+        double cos = Math.cos(angle);
+        double turnedX = cos * x - sin * y;
+        double turnedY = sin * x + cos * y;
+        return new Point(turnedX, turnedY, 0);
+    }
+    
+    public double getOrientedAngle(Point vector) {
+        double angleCos = (x*vector.getX() + y*vector.getY() + z*vector.getZ())
+                /(getSize() * vector.getSize());
+        double angle = Math.acos(angleCos);
+        double sign = vector.getY()*x - y*vector.getX();
+        if (sign >= 0) return angle;
+        return -angle;
+    }
+    
     public Point get2DPoint() {
         return new Point(x, y, 0);
     }

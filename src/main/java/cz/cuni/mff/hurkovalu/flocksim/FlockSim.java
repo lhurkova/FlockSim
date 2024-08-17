@@ -4,6 +4,9 @@
 
 package cz.cuni.mff.hurkovalu.flocksim;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.logging.Level;
@@ -24,10 +27,12 @@ public class FlockSim {
         try {
             SwingUtilities.invokeAndWait(() -> g.createGUI());
             for (int i = 0; i < 300; i++) {
+                System.out.println("Step: "+i);
                 List<AgentInfo> agents = f.doStep();
-                for (AgentInfo agent: agents) {
-                    System.out.println(agent);
-                }
+//                for (AgentInfo agent: agents) {
+//                    System.out.println(agent);
+//                }
+                System.out.println();
                 g.paintAgents(agents);
                 Thread.sleep(300);
             }
