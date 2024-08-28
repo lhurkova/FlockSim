@@ -24,7 +24,7 @@ public class Flock {
     private PositionsAreas positionsAreas;
     private PositionsAreas oldPositionsAreas;
     
-    public Flock(int winHeight, int winWidth, int flockMembersCount, AgentProvider agentProvider) {
+    public Flock(int winHeight, int winWidth, int flockMembersCount, FlockModel flockModel) {
         this.winHeight = winHeight;
         this.winWidth = winWidth;
         
@@ -48,7 +48,7 @@ public class Flock {
             }
             Point vector = new Point(vX, vY, 0);
             
-            Agent agent = agentProvider.createAgent(position, vector, this);
+            Agent agent = flockModel.createAgent(position, vector, this);
             flockMembers.add(agent);
             
             Point2D areaPosition = getAreaCoord(position);

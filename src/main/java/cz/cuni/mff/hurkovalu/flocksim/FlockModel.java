@@ -8,6 +8,7 @@ package cz.cuni.mff.hurkovalu.flocksim;
  *
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
  */
-public interface AgentProvider {
+public interface FlockModel {
     public Agent createAgent(Point position, Point velocityVector, Flock flock);
+    public String getName();
 }
