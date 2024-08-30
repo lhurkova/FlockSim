@@ -17,20 +17,37 @@ import javax.swing.JComponent;
 public class FlockGraphics extends JComponent {
     
     private List<AgentInfo> agents = new ArrayList<>();
-    private static final int SIZE = 10;
+    private static final int[] SIZES = new int[] {6, 10, 14};
+    private int currSize;
+    private Color[] colors;
+    private Color currColor;
+    
+    public FlockGraphics() {
+        colors = new Color[] {new Color(0,0,128), new Color(128, 0, 0), new Color(0, 128, 0)};
+        currColor = colors[0];
+        currSize = SIZES[1];
+    }
     
     public void setAgents(List<AgentInfo> agents) {
         this.agents = agents;
     }
     
+    public void setColor(AgentColor color) {
+        currColor = colors[color.ordinal()];
+    }
+    
+    public void setSize(AgentSize size) {
+        currSize = SIZES[size.ordinal()];
+    }
+    
     private void paintAgent(AgentInfo agent, Graphics g) {
         Point position = agent.getPosition();
         Point velocityVector = agent.getVelocityVector().get2DPoint();
-        Point orthogonalVector = velocityVector.getOrtogonalVector().changeSizeTo(SIZE);
+        Point orthogonalVector = velocityVector.getOrtogonalVector().changeSizeTo(currSize);
         
         Point a = position.add(orthogonalVector);
         Point b = position.subtract(orthogonalVector);
-        Point c = position.add(velocityVector.changeSizeTo(SIZE+15));
+        Point c = position.add(velocityVector.changeSizeTo(currSize + 1.5 * currSize));
         int[] xs = new int[] {(int)Math.round(a.getX()),
             (int)Math.round(b.getX()), (int)Math.round(c.getX())};
         int[] ys = new int[] {(int)Math.round(a.getY()),
@@ -42,12 +59,24 @@ public class FlockGraphics extends JComponent {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        g.setColor(currColor);
         for (AgentInfo agent: agents) {
-            g.setColor(Color.red);
             paintAgent(agent, g);
 //            Point position = agent.getPosition();
 //            g.fillOval((int) Math.round(position.getX()), (int) Math.round(position.getY()), 20, 20);
         }
+    }
+    
+    public enum AgentColor {
+        BLUE,
+        RED,
+        GREEN
+    }
+    
+    public enum AgentSize {
+        SMALL,
+        MEDIUM,
+        BIG
     }
     
     

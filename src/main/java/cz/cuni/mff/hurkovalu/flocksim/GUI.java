@@ -4,12 +4,14 @@
  */
 package cz.cuni.mff.hurkovalu.flocksim;
 
+import cz.cuni.mff.hurkovalu.flocksim.descriptors.ComboBoxDescriptor;
+import cz.cuni.mff.hurkovalu.flocksim.descriptors.Descriptor;
+import cz.cuni.mff.hurkovalu.flocksim.descriptors.IntFieldDescriptor;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
@@ -56,6 +58,7 @@ public class GUI {
     private State state = State.FRONT_PAGE;
     private List<FlockModel> plugins = new ArrayList<>();
     private Timer timer;
+    private Settings settings;
     
     private CardLayout cardLayout;
     private JPanel cardsPanel;
@@ -76,12 +79,21 @@ public class GUI {
     private JButton settingsButton;
     private JComboBox<String> pluginSelector;
     private static final String EMPTY_SELECTOR = "No plug-in loaded";
+    
+    private IntFieldDescriptor stepsDescriptor;
+    private IntFieldDescriptor agentsDescriptor;
+    private ComboBoxDescriptor colorDescriptor;
+    private ComboBoxDescriptor sizeDescriptor;
 
     public GUI(int sizeX, int sizeY, int x, String name) {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.x = x;
         this.name = name;
+        stepsDescriptor = new IntFieldDescriptor("Number of steps", 0, 5000, 500);
+        colorDescriptor = new ComboBoxDescriptor("Color", new String[] {"blue", "red", "green"}, 0);
+        agentsDescriptor = new IntFieldDescriptor("Number of birds", 0, 200, 50);
+        sizeDescriptor = new ComboBoxDescriptor("Size", new String[] {"small", "medium", "big"}, 1);
     }
 
     public void createGUI() {
@@ -99,6 +111,7 @@ public class GUI {
                 
         settingsButton = new JButton("Settings");
         settingsButton.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+        settingsButton.addActionListener(e -> settings.setVisible(true));
         startButton = new JButton("Start");
         startButton.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
         startButton.addActionListener(e -> runSimulationWithButton());
@@ -121,6 +134,7 @@ public class GUI {
         toolBar.add(pauseButton);
         toolBar.add(continueButton);
         toolBar.add(stopButton);
+        
         createMenu();
         
         fGraphics = new FlockGraphics();
@@ -128,7 +142,6 @@ public class GUI {
         simulationPanel = new JPanel(true);
         simulationPanel.add(fGraphics);
         simulationPanel.setBackground(Color.WHITE);
-//        simulationPanel.add(new JLabel("Simulation panel"));
         JPanel frontPage = new JPanel();
         frontPage.setPreferredSize(new Dimension(sizeX, sizeY));
         JLabel label = new JLabel("Front Page");
@@ -139,6 +152,9 @@ public class GUI {
         cardsPanel.add(frontPage, FRONT_PAGE_PANEL);
         cardsPanel.add(simulationPanel, SIM_PANEL);
         cardLayout.show(cardsPanel, FRONT_PAGE_PANEL);
+        
+        settings = new Settings(frame, new Descriptor[] {stepsDescriptor,
+            agentsDescriptor, colorDescriptor, sizeDescriptor});        
         
         frame.getContentPane().add(toolBar, BorderLayout.NORTH);
         frame.getContentPane().add(cardsPanel, BorderLayout.CENTER);
@@ -206,9 +222,30 @@ public class GUI {
     }
        
     private void runSimulation(FlockModel flockModel) {
+        Parameters params = settings.getSimulationParams();
+        steps = params.getInteger(stepsDescriptor);
+        int count = params.getInteger(agentsDescriptor);
+        String color = params.getString(colorDescriptor);
+        String size = params.getString(sizeDescriptor);
+        fGraphics.setColor(decodeColor(color));
+        fGraphics.setSize(decodeSize(size));
         pluginSelector.setSelectedIndex(plugins.indexOf(flockModel));
-        simulation = new Flock(sizeY, sizeX, 20, flockModel);
+        simulation = new Flock(sizeY, sizeX, count, flockModel);
         changeState(State.RUNNING);
+    }
+    
+    private FlockGraphics.AgentColor decodeColor(String color) {
+        if ("blue".equals(color)) return FlockGraphics.AgentColor.BLUE;
+        if ("red".equals(color)) return FlockGraphics.AgentColor.RED;
+        if ("green".equals(color)) return FlockGraphics.AgentColor.GREEN;
+        throw new IllegalArgumentException();
+    }
+    
+    private FlockGraphics.AgentSize decodeSize(String size) {
+        if ("small".equals(size)) return FlockGraphics.AgentSize.SMALL;
+        if ("medium".equals(size)) return FlockGraphics.AgentSize.MEDIUM;
+        if ("big".equals(size)) return FlockGraphics.AgentSize.BIG;
+        throw new IllegalArgumentException();
     }
     
     private void changeEnabledProperty(JComponent component, PropertyChangeEvent e) {
@@ -242,6 +279,7 @@ public class GUI {
                 plugins.add(flockModel);
                 JMenuItem pluginItem = new JMenuItem(flockModel.getName());
                 pluginItem.addActionListener(e -> runSimulation(flockModel));
+                settings.addPlugin(flockModel);
                 runItemMenu.add(pluginItem);
                 runItemMenu.setEnabled(true);
                 if (pluginSelector.getItemCount() == 1
@@ -261,6 +299,8 @@ public class GUI {
             List<AgentInfo> agents = simulation.doStep();
             fGraphics.setAgents(agents);
             simulationPanel.repaint();
+        } else {
+            changeState(State.STOPPED);
         }
     }
     
