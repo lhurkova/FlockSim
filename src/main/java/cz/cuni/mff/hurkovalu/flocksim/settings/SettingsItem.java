@@ -7,6 +7,7 @@ package cz.cuni.mff.hurkovalu.flocksim.settings;
 import cz.cuni.mff.hurkovalu.flocksim.descriptors.ComboBoxDescriptor;
 import cz.cuni.mff.hurkovalu.flocksim.descriptors.Descriptor;
 import cz.cuni.mff.hurkovalu.flocksim.descriptors.IntFieldDescriptor;
+import cz.cuni.mff.hurkovalu.flocksim.descriptors.SliderDescriptor;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -31,7 +32,7 @@ public abstract class SettingsItem extends JPanel {
     
     abstract public Object getResultAsObject();
     
-    public static SettingsItem createCorrectSettingsRow(Descriptor desc) {
+    public static SettingsItem createCorrectSettingsItem(Descriptor desc) {
         switch (desc.getType()) {
             case INT_FIELD:
                 if (desc instanceof IntFieldDescriptor intFieldDescriptor) {
@@ -44,9 +45,14 @@ public abstract class SettingsItem extends JPanel {
                     return new ComboBoxItem(comboBoxDescriptor);
                 }
                 throw new IllegalArgumentException();
-
+            
+            case SLIDER:
+                if (desc instanceof SliderDescriptor sliderDescriptor) {
+                    return new SliderItem(sliderDescriptor);
+                }
+                throw new IllegalArgumentException();
             default:
-                throw new AssertionError();
+                throw new IllegalArgumentException();
         }
     }
 }

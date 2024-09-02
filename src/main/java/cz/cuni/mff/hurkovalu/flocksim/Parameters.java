@@ -14,62 +14,32 @@ import java.util.Map;
  */
 public class Parameters {
     
-    private Map<Descriptor, Object> parameters = new IdentityHashMap<>();
+    private Map<Descriptor, Object> parameters = new IdentityHashMap<>();   
     
-    public Parameters(Descriptor[] descriptors) {
-        for (Descriptor d: descriptors) {
-            parameters.put(d, null);
-        }
-    }
-    
-    public void add(Descriptor descriptor, Object value) {
+    public void put(Descriptor descriptor, Object value) {
         parameters.put(descriptor, value);
-    }
-    
-    public void set(Descriptor descriptor, Object value) {
-        if (parameters.containsKey(descriptor)) {
-            parameters.put(descriptor, value);
-        } else {
-            throw new IllegalArgumentException();
-        }
-        
     }
     
     public Integer getInteger(Descriptor descriptor) {
         Object value = parameters.get(descriptor);
-        if (value != null) {
-            try {
-                int intValue = (int) value;
-                return intValue;
-            } catch (ClassCastException e) {
-                return null;
-            }
+        if (value instanceof Integer) {
+            return (Integer) value;
         }
         return null;
     }
     
     public String getString(Descriptor descriptor) {
         Object value = parameters.get(descriptor);
-        if (value != null) {
-            try {
-                String stringValue = (String) value;
-                return stringValue;
-            } catch (ClassCastException e) {
-                return null;
-            }
+        if (value instanceof String) {
+            return (String) value;
         }
         return null;
     }
     
     public Boolean getBoolean(Descriptor descriptor) {
         Object value = parameters.get(descriptor);
-        if (value != null) {
-            try {
-                boolean booleanValue = (boolean) value;
-                return booleanValue;
-            } catch (ClassCastException e) {
-                return null;
-            }
+        if (value instanceof Boolean) {
+            return (Boolean) value;
         }
         return null;
     }

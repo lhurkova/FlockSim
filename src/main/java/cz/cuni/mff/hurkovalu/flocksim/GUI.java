@@ -38,6 +38,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.Timer;
+import javax.swing.ToolTipManager;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -98,6 +99,8 @@ public class GUI {
 
     public void createGUI() {
         //System.setProperty("apple.laf.useScreenMenuBar", "true");
+        ToolTipManager.sharedInstance().setInitialDelay(100);
+        ToolTipManager.sharedInstance().setDismissDelay(20000);
         frame = new JFrame(name);
         frame.setLocation(x, 0);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -230,7 +233,8 @@ public class GUI {
         fGraphics.setColor(decodeColor(color));
         fGraphics.setSize(decodeSize(size));
         pluginSelector.setSelectedIndex(plugins.indexOf(flockModel));
-        simulation = new Flock(sizeY, sizeX, count, flockModel);
+        Parameters pluginParams = settings.getPluginParams(flockModel);
+        simulation = new Flock(sizeY, sizeX, count, flockModel, pluginParams);
         changeState(State.RUNNING);
     }
     

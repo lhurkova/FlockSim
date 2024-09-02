@@ -10,26 +10,26 @@ package cz.cuni.mff.hurkovalu.flocksim.descriptors;
  */
 public class SliderDescriptor extends Descriptor {
     
-    private float min;
-    private float max;
-    private float defaultValue;
+    private int min;
+    private int max;
+    private int defaultValue;
     
-    public SliderDescriptor(String description, float min, float max, float defaultValue) {
+    public SliderDescriptor(String description, int min, int max, int defaultValue) {
         super(description, Type.SLIDER);
         this.min = min;
         this.max = max;
         this.defaultValue = defaultValue;
     }
     
-    public float getMin() {
+    public int getMin() {
         return min;
     }
     
-    public float getMax() {
+    public int getMax() {
         return max;
     }
     
-    public float getDefaultValue() {
+    public int getDefaultValue() {
         return defaultValue;
     }
     

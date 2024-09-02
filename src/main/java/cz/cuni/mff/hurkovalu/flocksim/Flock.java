@@ -23,10 +23,12 @@ public class Flock {
     private static final int SIZE_OF_AREA = 10;
     private PositionsAreas positionsAreas;
     private PositionsAreas oldPositionsAreas;
+    private final Parameters params;
     
-    public Flock(int winHeight, int winWidth, int flockMembersCount, FlockModel flockModel) {
+    public Flock(int winHeight, int winWidth, int flockMembersCount, FlockModel flockModel, Parameters params) {
         this.winHeight = winHeight;
         this.winWidth = winWidth;
+        this.params = params;
         
         areaHeight = winHeight / SIZE_OF_AREA;
         areaWidth = winWidth / SIZE_OF_AREA;
@@ -95,6 +97,10 @@ public class Flock {
             }
         }
         return neighbours;
+    }
+
+    public Parameters getParams() {
+        return params;
     }
     
     private Point correctNeighbourPosition(Point2D area, Point position) {

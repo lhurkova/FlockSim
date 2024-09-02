@@ -6,16 +6,22 @@ package cz.cuni.mff.hurkovalu.flocksim;
 
 import cz.cuni.mff.hurkovalu.flocksim.settings.SettingsItem;
 import cz.cuni.mff.hurkovalu.flocksim.descriptors.Descriptor;
+import cz.cuni.mff.hurkovalu.flocksim.settings.Savable;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
@@ -25,63 +31,122 @@ import javax.swing.JTextField;
  */
 public class Settings extends JDialog {
     
-    private List<FlockModel> plugins = new ArrayList<>();
+    private Map<FlockModel, List<SettingsItem>> pluginsSettings = new IdentityHashMap<>();
+    private Map<FlockModel, Parameters> pluginsParams = new IdentityHashMap<>();
     private JTabbedPane mainTabbedPane;
-    private JPanel simulationSettings;
+    private JPanel simulationSettingsPanel;
     private JTabbedPane pluginsTabbedPane;
-    private JPanel pluginsSettings;
+    private JPanel pluginsSettingsPanel;
     private JTextField stepsTextField;
     private JTextField agentsTextField;
-    private Parameters simulationParameters;
-    private List<SettingsItem> simulationRows;
+    private Parameters simulationParams;
+    private List<SettingsItem> simulationSettings;
+    private Frame owner;
     
     public Settings(Frame owner, Descriptor[] mainParams) {
         super(owner, "Settings", true);
+        this.owner = owner;
         
-        simulationParameters = new Parameters(mainParams);
+        addWindowListener(new SavingListener());
+        
+        simulationParams = new Parameters();
         
         setPreferredSize(new Dimension(500, 300));
+        setBackground(Color.white);
         mainTabbedPane = new JTabbedPane();
         mainTabbedPane.setTabPlacement(JTabbedPane.LEFT);
         mainTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         
-        simulationSettings = new JPanel();
-        simulationSettings.setLayout(new BoxLayout(simulationSettings, BoxLayout.Y_AXIS));
+        simulationSettingsPanel = new JPanel();
+        simulationSettingsPanel.setLayout(new BoxLayout(simulationSettingsPanel, BoxLayout.Y_AXIS));
         
-        simulationRows = new ArrayList<>();
+        simulationSettings = new ArrayList<>();
         for (Descriptor param: mainParams) {
-            SettingsItem row = SettingsItem.createCorrectSettingsRow(param);
-            simulationRows.add(row);
+            SettingsItem row = SettingsItem.createCorrectSettingsItem(param);
             simulationSettings.add(row);
+            simulationSettingsPanel.add(row);
         }
         
-        mainTabbedPane.add("Simulation", simulationSettings);
+        mainTabbedPane.add("Simulation", simulationSettingsPanel);
         
-        pluginsSettings = new JPanel();
-        mainTabbedPane.addTab("Plug-ins", pluginsSettings);
+        
+        pluginsSettingsPanel = new JPanel();
+        pluginsSettingsPanel.setLayout(new BoxLayout(pluginsSettingsPanel, BoxLayout.Y_AXIS));
+//        mainTabbedPane.addTab("Plug-ins", pluginsSettingsPanel);
         pluginsTabbedPane = new JTabbedPane();
-        pluginsSettings.add(pluginsTabbedPane);
-        
+        JScrollPane scroll = new JScrollPane(pluginsSettingsPanel);
+        mainTabbedPane.addTab("Plug-ins", scroll);
+        pluginsSettingsPanel.add(pluginsTabbedPane);
         getContentPane().add(mainTabbedPane, BorderLayout.CENTER);
         JButton closeButton = new JButton("Close");
-        closeButton.addActionListener(e -> this.setVisible(false));
+        closeButton.addActionListener(e -> {this.setVisible(false);
+                                            saveSettings();});
         getContentPane().add(closeButton, BorderLayout.SOUTH);
         pack();
     }
     
     public Parameters getSimulationParams() {
-        for (SettingsItem row: simulationRows) {
-            simulationParameters.set(row.getDescriptor(), row.getResultAsObject());
+        for (SettingsItem row: simulationSettings) {
+            simulationParams.put(row.getDescriptor(), row.getResultAsObject());
         }
-        return simulationParameters;
+        return simulationParams;
+    }
+    
+    public Parameters getPluginParams(FlockModel plugin) {
+        List<SettingsItem> pluginSettings = pluginsSettings.get(plugin);
+        Parameters pluginParams = pluginsParams.get(plugin);
+        if (pluginSettings != null && pluginParams != null) {
+            for (SettingsItem i: pluginSettings) {
+                pluginParams.put(i.getDescriptor(), i.getResultAsObject());
+            }
+        }
+        return pluginParams;
     }
     
     public void addPlugin(FlockModel plugin) {
-        plugins.add(plugin);
+        List<SettingsItem> pluginSettings = createPluginSettings(plugin);
+        pluginsSettings.put(plugin, pluginSettings);
+        pluginsParams.put(plugin, new Parameters());
+    }
+    
+    private List<SettingsItem> createPluginSettings(FlockModel plugin) {
         JPanel pluginPanel = new JPanel();
-        pluginPanel.setPreferredSize(new Dimension(200, 300));
-        pluginPanel.add(new JLabel("Plugin Settings"));
+        pluginPanel.setLayout(new BoxLayout(pluginPanel, BoxLayout.Y_AXIS));
+        List<Descriptor> descriptors = plugin.getDescriptors();
+        List<SettingsItem> settingsItems = new ArrayList<>();
+        for (Descriptor d: descriptors) {
+            SettingsItem item = SettingsItem.createCorrectSettingsItem(d);
+            settingsItems.add(item);
+            pluginPanel.add(item);
+        }
         pluginsTabbedPane.add(plugin.getName(), pluginPanel);
+        return settingsItems;
+    }
+    
+    private void saveSettings() {
+        for (SettingsItem i: simulationSettings) {
+                if (i instanceof Savable savable) {
+                    savable.save();
+                }
+            }
+            
+            for (List<SettingsItem> items: pluginsSettings.values()) {
+                for (SettingsItem i: items) {
+                    if (i instanceof Savable savable) {
+                        savable.save();
+                    }
+                }
+            }
+    }
+    
+    private class SavingListener extends WindowAdapter {
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            saveSettings();
+        }
+        
+        
     }
     
 }

@@ -4,6 +4,9 @@
  */
 package cz.cuni.mff.hurkovalu.flocksim;
 
+import cz.cuni.mff.hurkovalu.flocksim.descriptors.Descriptor;
+import java.util.List;
+
 /**
  *
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
@@ -11,4 +14,5 @@ package cz.cuni.mff.hurkovalu.flocksim;
 public interface FlockModel {
     public Agent createAgent(Point position, Point velocityVector, Flock flock);
     public String getName();
+    public List<Descriptor> getDescriptors();
 }
