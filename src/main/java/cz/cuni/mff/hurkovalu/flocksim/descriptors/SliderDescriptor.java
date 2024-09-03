@@ -14,8 +14,13 @@ public class SliderDescriptor extends Descriptor {
     private int max;
     private int defaultValue;
     
-    public SliderDescriptor(String description, int min, int max, int defaultValue) {
+    public SliderDescriptor(String description, int min, int max,
+            int defaultValue) throws IllegalArgumentException{
         super(description, Type.SLIDER);
+        if (defaultValue < min || defaultValue > max) {
+            throw new IllegalArgumentException("Default value "+defaultValue
+                    +" is out of bounds: ["+min+","+max+"]");
+        }
         this.min = min;
         this.max = max;
         this.defaultValue = defaultValue;

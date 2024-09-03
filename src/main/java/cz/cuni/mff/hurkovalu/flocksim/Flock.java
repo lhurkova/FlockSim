@@ -147,6 +147,14 @@ public class Flock {
         return new Point(newX, newY, 0);
     }
     
+    public List<AgentInfo> getAgentInfos() {
+        List<AgentInfo> infos = new ArrayList<>();
+        for (Agent a: flockMembers) {
+            infos.add(a.getInfo());
+        }
+        return infos;
+    }
+    
     private static Point2D getAreaCoord(Point position) {
         return new Point2D((int)position.getX() / SIZE_OF_AREA,
         (int)position.getY() / SIZE_OF_AREA);    

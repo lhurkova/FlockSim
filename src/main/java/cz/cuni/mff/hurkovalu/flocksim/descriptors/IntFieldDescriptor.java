@@ -14,8 +14,13 @@ public class IntFieldDescriptor extends Descriptor {
     private int max;
     private int defaultValue;
     
-    public IntFieldDescriptor(String description, int min, int max, int defaultValue) {
+    public IntFieldDescriptor(String description, int min, int max,
+            int defaultValue) throws IllegalArgumentException {
         super(description, Type.INT_FIELD);
+        if (defaultValue < min || defaultValue > max) {
+            throw new IllegalArgumentException("Default value "+defaultValue
+                    +" is out of bounds: ["+min+","+max+"]");
+        }
         this.min = min;
         this.max = max;
         this.defaultValue = defaultValue;

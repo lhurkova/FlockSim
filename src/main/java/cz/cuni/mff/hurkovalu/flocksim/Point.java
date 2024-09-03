@@ -98,6 +98,25 @@ public class Point {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Point p) {
+            return Math.abs(x - p.x) < 1e-5 &&
+                    Math.abs(y - p.y) < 1e-5 &&
+                    Math.abs(z - p.z) < 1e-5;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + (int) (Double.doubleToLongBits(this.x) ^ (Double.doubleToLongBits(this.x) >>> 32));
+        hash = 83 * hash + (int) (Double.doubleToLongBits(this.y) ^ (Double.doubleToLongBits(this.y) >>> 32));
+        hash = 83 * hash + (int) (Double.doubleToLongBits(this.z) ^ (Double.doubleToLongBits(this.z) >>> 32));
+        return hash;
+    }
+    
+    @Override
     public String toString() {
         return "(" + x + ", " + y + ", " + z + ")";
     }

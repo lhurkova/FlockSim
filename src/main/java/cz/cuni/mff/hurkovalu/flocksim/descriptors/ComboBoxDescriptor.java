@@ -13,8 +13,13 @@ public class ComboBoxDescriptor extends Descriptor {
     private String[] options;
     private int defaultValue;
     
-    public ComboBoxDescriptor(String description, String[] options, int defaultValue) {
+    public ComboBoxDescriptor(String description, String[] options,
+            int defaultValue) throws IllegalArgumentException {
         super(description, Type.COMBO_BOX);
+        if (defaultValue < 0 || defaultValue >= options.length) {
+            throw new IllegalArgumentException("Default value "+defaultValue
+                    +" is out of bounds: [0,"+(options.length-1)+"]");
+        }
         this.options = options;
         this.defaultValue = defaultValue;
     }

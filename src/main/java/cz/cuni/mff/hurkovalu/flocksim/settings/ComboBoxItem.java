@@ -16,6 +16,10 @@ public class ComboBoxItem extends SettingsItem {
     
     private JComboBox<String> comboBox;
 
+    /**
+     * 
+     * @param descriptor 
+     */
     public ComboBoxItem(ComboBoxDescriptor descriptor) {
         super(descriptor);
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));

@@ -4,6 +4,8 @@
  */
 package cz.cuni.mff.hurkovalu.flocksim;
 
+import java.util.Objects;
+
 /**
  *
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
@@ -30,6 +32,25 @@ public class AgentInfo {
     public String toString() {
         return "position:" + position.toString() + "\nvelocity: " + velocityVector.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof AgentInfo a) {
+            return position.equals(a.position) &&
+            velocityVector.equals(a.velocityVector);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + Objects.hashCode(this.position);
+        hash = 97 * hash + Objects.hashCode(this.velocityVector);
+        return hash;
+    }
+    
+    
     
     
 }
