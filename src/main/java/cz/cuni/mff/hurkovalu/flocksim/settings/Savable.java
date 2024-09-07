@@ -5,9 +5,12 @@
 package cz.cuni.mff.hurkovalu.flocksim.settings;
 
 /**
- *
+ * Interface representing a object which state can be saved.
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
  */
 public interface Savable {
+    /**
+     * Saves the current state of the object.
+     */
     public void save();
 }

@@ -7,7 +7,8 @@ package cz.cuni.mff.hurkovalu.flocksim;
 import java.util.Objects;
 
 /**
- *
+ * Class representing a state of the agent in agent-based flocking simulation.
+ * Class contains a specified position and velocity vector an agent.
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
  */
 public class AgentInfo {
@@ -15,15 +16,28 @@ public class AgentInfo {
     private Point position;
     private Point velocityVector;
     
+    /**
+     * Creates a new {@link AgentInfo} with specified position and velocity vector.
+     * @param position position of an agent
+     * @param velocityVector velocity vector of an agent
+     */
     public AgentInfo(Point position, Point velocityVector) {
         this.position = position;
         this.velocityVector = velocityVector;
     }
     
+    /**
+     * Returns a position of an agent.
+     * @return position of an agent
+     */
     public Point getPosition() {
         return position;
     }
     
+    /**
+     * Returns a velocity vector of an agent.
+     * @return velocity vector of an agent
+     */
     public Point getVelocityVector() {
         return velocityVector;
     }

@@ -5,7 +5,7 @@
 package cz.cuni.mff.hurkovalu.flocksim;
 
 /**
- *
+ * Class representing a point in 2D space.
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
  */
 public record Point2D(int x, int y) {

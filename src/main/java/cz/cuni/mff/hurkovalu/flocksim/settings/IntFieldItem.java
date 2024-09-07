@@ -13,7 +13,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 /**
- *
+ * Class representing a settings item in FlockSim GUI containing a JTextFiled that
+ * allows only integer values inside a specified range.
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
  */
 public class IntFieldItem extends SettingsItem implements Savable {
@@ -25,6 +26,11 @@ public class IntFieldItem extends SettingsItem implements Savable {
     private int min;
     private int max;
     
+    /**
+     * Creates a new {@link IntFieldItem} based on a specified descriptor.
+     * @param descriptor descriptor describing a simulation parameter that will be
+     * graphically represented by this {@link IntFieldItem}
+     */
     public IntFieldItem(IntFieldDescriptor descriptor) {
         super(descriptor);
         min = descriptor.getMin();
@@ -43,15 +49,25 @@ public class IntFieldItem extends SettingsItem implements Savable {
         add(errorLabel);
     }
     
+    /**
+     * Gets the latest valid value that was written in the component.
+     * @return the latest valid value
+     */
     public int getResult() {
         return savedValue;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object getResultAsObject() {
         return getResult();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void save() {
         if (verifier.verify()) {
@@ -83,7 +99,6 @@ public class IntFieldItem extends SettingsItem implements Savable {
 
         @Override
         public void changedUpdate(DocumentEvent e) {
-            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         }
         
         public boolean verify() {

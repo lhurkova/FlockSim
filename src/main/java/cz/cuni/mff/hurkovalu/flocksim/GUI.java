@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -43,7 +44,7 @@ import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- *
+ * Class representing the graphical user interface of the FlockSim.
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
  */
 public class GUI {
@@ -60,6 +61,7 @@ public class GUI {
     private List<FlockModel> plugins = new ArrayList<>();
     private Timer timer;
     private Settings settings;
+    JFileChooser fc;
     
     private CardLayout cardLayout;
     private JPanel cardsPanel;
@@ -86,6 +88,13 @@ public class GUI {
     private ComboBoxDescriptor colorDescriptor;
     private ComboBoxDescriptor sizeDescriptor;
 
+    /**
+     * Creates a new instance of the {@link GUI} of specified window size.
+     * @param sizeX
+     * @param sizeY
+     * @param x
+     * @param name 
+     */
     public GUI(int sizeX, int sizeY, int x, String name) {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
@@ -97,6 +106,9 @@ public class GUI {
         sizeDescriptor = new ComboBoxDescriptor("Size", new String[] {"small", "medium", "big"}, 1);
     }
 
+    /**
+     * Initializes all the graphical components in the {@link GUI}.
+     */
     public void createGUI() {
         //System.setProperty("apple.laf.useScreenMenuBar", "true");
         ToolTipManager.sharedInstance().setInitialDelay(100);
@@ -106,6 +118,7 @@ public class GUI {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 
         timer = new Timer(100, e -> paintSimulation());
+        fc = new JFileChooser();
         
         JToolBar toolBar = new JToolBar("Tool Bar");
         
@@ -269,13 +282,16 @@ public class GUI {
     }
     
     private void loadPlugin() {
-        JFileChooser fc = new JFileChooser();
+        Preferences pref = Preferences.userNodeForPackage(getClass());
+        String prevPath = pref.get(PLUGIN_PATH, ".");
         fc.addChoosableFileFilter(new FileNameExtensionFilter("JAR file", "jar") );
         fc.setAcceptAllFileFilterUsed(false);
+        fc.setSelectedFile(new File(prevPath));
         int returnVal = fc.showOpenDialog(frame);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             try {
                 File file = fc.getSelectedFile();
+                pref.put(PLUGIN_PATH, file.getAbsolutePath());
                 URL jarPath = file.toURI().toURL();
                 URLClassLoader clsLoader = new URLClassLoader(new URL[]{jarPath});
                 ServiceLoader<FlockModel> sv = ServiceLoader.load(FlockModel.class, clsLoader);
@@ -296,6 +312,7 @@ public class GUI {
             }
         }
     }
+    private static final String PLUGIN_PATH = "plugin path";
     
     private void paintSimulation() {
         if (steps-- > 0) {
@@ -308,12 +325,7 @@ public class GUI {
         }
     }
     
-    public void paintAgents(List<AgentInfo> agents) {
-        fGraphics.setAgents(agents);
-        frame.repaint();
-    }
-    
-    public void showFrontPage() {
+    private void showFrontPage() {
         changeState(State.FRONT_PAGE);
     }
     

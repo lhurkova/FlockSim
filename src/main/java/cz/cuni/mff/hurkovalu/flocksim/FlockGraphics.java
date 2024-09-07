@@ -11,7 +11,7 @@ import java.util.List;
 import javax.swing.JComponent;
 
 /**
- *
+ * Class for painting the agents in flocking simulation.
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
  */
 public class FlockGraphics extends JComponent {
@@ -22,20 +22,35 @@ public class FlockGraphics extends JComponent {
     private Color[] colors;
     private Color currColor;
     
+    /**
+     * Creates a new {@link FlockGraphics}. 
+     */
     public FlockGraphics() {
         colors = new Color[] {new Color(0,0,128), new Color(128, 0, 0), new Color(0, 128, 0)};
         currColor = colors[0];
         currSize = SIZES[1];
     }
     
+    /**
+     * Sets agents that are going to be painted during the next repaint.
+     * @param agents agents to be painted
+     */
     public void setAgents(List<AgentInfo> agents) {
         this.agents = agents;
     }
     
+    /**
+     * Sets a color of the agents.
+     * @param color color of the agents
+     */
     public void setColor(AgentColor color) {
         currColor = colors[color.ordinal()];
     }
     
+    /**
+     * Sets a size of the agents.
+     * @param size size of the agents
+     */
     public void setSize(AgentSize size) {
         currSize = SIZES[size.ordinal()];
     }
@@ -56,23 +71,30 @@ public class FlockGraphics extends JComponent {
         g.fillPolygon(xs, ys, 3);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(currColor);
         for (AgentInfo agent: agents) {
             paintAgent(agent, g);
-//            Point position = agent.getPosition();
-//            g.fillOval((int) Math.round(position.getX()), (int) Math.round(position.getY()), 20, 20);
         }
     }
     
+    /**
+     * Enum containing possible colors of the agents.
+     */
     public enum AgentColor {
         BLUE,
         RED,
         GREEN
     }
     
+    /**
+     * Enum containing possible sizes of the agents.
+     */
     public enum AgentSize {
         SMALL,
         MEDIUM,

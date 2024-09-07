@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Random;
 
 /**
- *
+ * Class representing a flock in agent-based flocking simulation. Flock exists in
+ * an area of two dimensional space of specified size and contains a specified number
+ * of flock members - {@link Agent}s.
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
  */
 public class Flock {
@@ -25,6 +27,15 @@ public class Flock {
     private PositionsAreas oldPositionsAreas;
     private final Parameters params;
     
+    /**
+     * Creates a new {@link Flock} of specified size, containing specified number of 
+     * flock members. The type of agent is determined by given {@link FlockModel}.
+     * @param winHeight height of the simulation window
+     * @param winWidth width of the simulation window
+     * @param flockMembersCount number of flock members
+     * @param flockModel flock model that determines the implementation of the agents
+     * @param params simulation parameters
+     */
     public Flock(int winHeight, int winWidth, int flockMembersCount, FlockModel flockModel, Parameters params) {
         this.winHeight = winHeight;
         this.winWidth = winWidth;
@@ -64,19 +75,26 @@ public class Flock {
         return new Point2D(x, y);
     }
     
-    public List<AgentInfo> getNeighbours(Point position, int view) {
+    /**
+     * Gets all flock members that are located in the area specified by center
+     * and radius.
+     * @param center center of the area
+     * @param radius radius of the area
+     * @return AgentInfos of the flock members in the area
+     */
+    public List<AgentInfo> getNeighbours(Point center, int radius) {
         List<AgentInfo> neighbours = new ArrayList<>();
-        int areaRange = Math.ceilDiv(view, SIZE_OF_AREA);
+        int areaRange = Math.ceilDiv(radius, SIZE_OF_AREA);
         int minX = 0;
         int minY = 0;
         int maxX = areaWidth - 1;
         int maxY = areaHeight - 1;
-        Point2D areaPosition = getAreaCoord(position);
-        if (2*view < winWidth) {
+        Point2D areaPosition = getAreaCoord(center);
+        if (2*radius < winWidth) {
             minX = areaPosition.x() - areaRange;
             maxX = areaPosition.x() + areaRange;
         }
-        if (2*view < winHeight) {
+        if (2*radius < winHeight) {
             minY = areaPosition.y() - areaRange;
             maxY = areaPosition.y() + areaRange;
         }
@@ -88,8 +106,8 @@ public class Flock {
                     oldPositionsAreas.getAgentsInArea(normalizeAreaCoord(currArea));
                 for (AgentInfo agent: potentialNeighnbours) {
                     Point correctedPosition = correctNeighbourPosition(currArea, agent.getPosition());
-                    double distance = position.getDistanceVector(correctedPosition).getSize();
-                    if (distance <= view) {
+                    double distance = center.getDistanceVector(correctedPosition).getSize();
+                    if (distance <= radius) {
                         neighbours.add(new AgentInfo(correctedPosition, agent.getVelocityVector()));
                     }
                 }
@@ -99,6 +117,10 @@ public class Flock {
         return neighbours;
     }
 
+    /**
+     * Gets the simulation parameters.
+     * @return simulation parameters
+     */
     public Parameters getParams() {
         return params;
     }
@@ -117,17 +139,10 @@ public class Flock {
         return position;
     }
     
-//    public List<AgentInfo> getNeighbours(Point position, int distance) {
-//        List<AgentInfo> neighbours = new ArrayList<>();
-//        for (Agent agent: flockMembers) {
-//            Point agentPosition = agent.getInfo().getPosition();
-//            if (position.getDistanceVector(agentPosition).getSize() <= distance) {
-//                neighbours.add(agent.getInfo());
-//            }
-//        }
-//        return neighbours;
-//    }
-    
+    /**
+     * Executes one step of the flocking simulation.
+     * @return new information about all flock members
+     */
     public List<AgentInfo> doStep() {
         List<AgentInfo> infos = new ArrayList<>();
         for (Agent agent: flockMembers) {
@@ -141,12 +156,21 @@ public class Flock {
         return infos;
     }
     
+    /**
+     * Returns valid position inside the simulation window
+     * @param position position to be normalized
+     * @return normalized position
+     */
     public Point normalizePosition(Point position) {
         double newX = (position.getX() + winWidth)%winWidth;
         double newY = (position.getY() + winHeight)%winHeight;
         return new Point(newX, newY, 0);
     }
     
+    /**
+     * Gets current information about all flock members.
+     * @return current information about all flock members
+     */
     public List<AgentInfo> getAgentInfos() {
         List<AgentInfo> infos = new ArrayList<>();
         for (Agent a: flockMembers) {

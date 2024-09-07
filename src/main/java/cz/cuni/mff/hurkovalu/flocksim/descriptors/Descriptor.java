@@ -5,7 +5,7 @@
 package cz.cuni.mff.hurkovalu.flocksim.descriptors;
 
 /**
- *
+ * Abstract class for a description of a simulation parameter.
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
  */
 public abstract class Descriptor {
@@ -13,19 +13,35 @@ public abstract class Descriptor {
     private String description;
     private Type type;
     
-    public Descriptor(String descrition, Type type) {
+    /**
+     * Creates a new {@link Descriptor} with a short description and specified type.
+     * @param descrition short description of the parameter
+     * @param type type of the parameter
+     */
+    protected Descriptor(String descrition, Type type) {
         this.description = descrition;
         this.type = type;
     }
     
+    /**
+     * Gets a short description of the parameter.
+     * @return description of the parameter
+     */
     public String getDescription() {
         return description;
     }
     
+    /**
+     * Gets a type of the descriptor.
+     * @return type of the descriptor
+     */
     public Type getType() {
         return type;
     }
-        
+    
+    /**
+     * Enum containing types of descriptor used in FlockSim.
+     */
     public enum Type {
         INT_FIELD,
         COMBO_BOX,

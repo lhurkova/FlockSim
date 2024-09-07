@@ -9,7 +9,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
 /**
- *
+ * Class representing a settings item in FlockSim GUI containing a JComboBox.
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
  */
 public class ComboBoxItem extends SettingsItem {
@@ -17,8 +17,9 @@ public class ComboBoxItem extends SettingsItem {
     private JComboBox<String> comboBox;
 
     /**
-     * 
-     * @param descriptor 
+     * Creates a new {@link ComboBoxItem} based on a specified descriptor.
+     * @param descriptor descriptor describing a simulation parameter that will be
+     * graphically represented by this {@link ComboBoxItem}
      */
     public ComboBoxItem(ComboBoxDescriptor descriptor) {
         super(descriptor);
@@ -29,10 +30,17 @@ public class ComboBoxItem extends SettingsItem {
         add(comboBox);
     }
     
+    /**
+     * Gets a currently selected value in the component.
+     * @return currently selected value
+     */
     public String getResult() {
         return (String) comboBox.getSelectedItem();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object getResultAsObject() {
         return getResult();

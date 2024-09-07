@@ -8,16 +8,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Class for storing agents in areas for quick searching.
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
  */
 public class PositionsAreas {
     private AgentList[][] agents;
     
-    public PositionsAreas(int x, int y) {
-        agents = new AgentList[x][y];
+    /**
+     * Creates a new {@link PositionsAreas} with specified areas.
+     * @param sizeX number of areas horizontally
+     * @param sizeY number of areas vertically
+     */
+    public PositionsAreas(int sizeX, int sizeY) {
+        agents = new AgentList[sizeX][sizeY];
     }
     
+    /**
+     * Gets all agents in specified area
+     * @param pos coordinates of the area
+     * @return all agents in area
+     */
     public List<AgentInfo> getAgentsInArea(Point2D pos) {
         AgentList result = agents[pos.x()][pos.y()];
         if (result != null) {
@@ -25,7 +35,12 @@ public class PositionsAreas {
         }
         return new ArrayList<>();
     }
-    
+   
+    /**
+     * Puts the agent in specified area.
+     * @param pos coordinates of the area
+     * @param agent agent to be putted in the area
+     */
     public void putAgentInArea(Point2D pos, AgentInfo agent) {
         if (agents[pos.x()][pos.y()] == null) {
             agents[pos.x()][pos.y()] = new AgentList();

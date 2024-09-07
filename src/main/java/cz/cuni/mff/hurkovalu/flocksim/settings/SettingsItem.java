@@ -13,25 +13,45 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 /**
- *
+ * Class representing a settings item in FlockSim GUI.
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
  */
 public abstract class SettingsItem extends JPanel {
     
     private Descriptor descriptor;
     
-    public SettingsItem(Descriptor descriptor) {
+    /**
+     * Creates an empty settings item.
+     * @param descriptor descriptor describing a simulation parameter that will be
+     * graphically represented by this {@link SettingsItem}
+     */
+    protected SettingsItem(Descriptor descriptor) {
         this.descriptor = descriptor;
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
         setBorder(new EmptyBorder(5, 5, 5, 5));
     }
     
+    /**
+     * Gets a descriptor describing a simulation parameter.
+     * @return descriptor describing a simulation parameter
+     */
     public Descriptor getDescriptor() {
         return descriptor;
     }
     
+    /**
+     * Gets a current value from the component.
+     * @return current value from the component
+     */
     abstract public Object getResultAsObject();
     
+    /**
+     * Creates a correct type of a settings item based on a type of
+     * a specified descriptor.
+     * @param desc descriptor describing a simulation parameter that will be
+     * graphically represented by this {@link SettingsItem}
+     * @return correct type of a settings item
+     */
     public static SettingsItem createCorrectSettingsItem(Descriptor desc) {
         switch (desc.getType()) {
             case INT_FIELD:

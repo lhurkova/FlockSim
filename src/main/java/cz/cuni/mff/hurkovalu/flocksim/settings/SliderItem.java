@@ -14,13 +14,18 @@ import javax.swing.JLabel;
 import javax.swing.JSlider;
 
 /**
- *
+ * Class representing a settings item in FlockSim GUI containing a JSlider.
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
  */
 public class SliderItem extends SettingsItem {
     
     JSlider slider;
     
+    /**
+     * Creates a new {@link SliderItem} based on a specified descriptor.
+     * @param descriptor descriptor describing a simulation parameter that will be
+     * graphically represented by this {@link SliderItem}
+     */
     public SliderItem(SliderDescriptor descriptor) {
         super(descriptor);
         int min = descriptor.getMin();
@@ -49,10 +54,17 @@ public class SliderItem extends SettingsItem {
         add(slider);
     }
     
+    /**
+     * Gets a currently selected value in the component.
+     * @return currently selected value
+     */
     public int getResult() {
         return slider.getValue();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object getResultAsObject() {
         return getResult();

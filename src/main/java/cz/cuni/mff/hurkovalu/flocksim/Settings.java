@@ -26,7 +26,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 /**
- *
+ * Class representing settings window in graphical user interface.
  * @author Lucie Hurkova <hurkova.lucie@email.cz>
  */
 public class Settings extends JDialog {
@@ -43,6 +43,12 @@ public class Settings extends JDialog {
     private List<SettingsItem> simulationSettings;
     private Frame owner;
     
+    /**
+     * Creates a new {@link Settings} dialog with specified owner and main simulation
+     * parameters.
+     * @param owner owner frame
+     * @param mainParams main simulation parameters
+     */
     public Settings(Frame owner, Descriptor[] mainParams) {
         super(owner, "Settings", true);
         this.owner = owner;
@@ -85,6 +91,10 @@ public class Settings extends JDialog {
         pack();
     }
     
+    /**
+     * Gets values of the main simulation parameters.
+     * @return values of the main simulation parameters
+     */
     public Parameters getSimulationParams() {
         for (SettingsItem row: simulationSettings) {
             simulationParams.put(row.getDescriptor(), row.getResultAsObject());
@@ -92,6 +102,11 @@ public class Settings extends JDialog {
         return simulationParams;
     }
     
+    /**
+     * Gets values of parameters for the specified plugin.
+     * @param plugin required plugin
+     * @return values of the plugin parameters
+     */
     public Parameters getPluginParams(FlockModel plugin) {
         List<SettingsItem> pluginSettings = pluginsSettings.get(plugin);
         Parameters pluginParams = pluginsParams.get(plugin);
@@ -103,6 +118,10 @@ public class Settings extends JDialog {
         return pluginParams;
     }
     
+    /**
+     * Registers a new plugin and creates settings tab for the plugin parameters.
+     * @param plugin new plugin
+     */
     public void addPlugin(FlockModel plugin) {
         List<SettingsItem> pluginSettings = createPluginSettings(plugin);
         pluginsSettings.put(plugin, pluginSettings);
