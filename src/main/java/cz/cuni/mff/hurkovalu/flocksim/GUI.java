@@ -12,21 +12,20 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
-import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -36,6 +35,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.Timer;
@@ -59,6 +59,8 @@ public class GUI {
     private int steps = 1000;
     private State state = State.FRONT_PAGE;
     private List<FlockModel> plugins = new ArrayList<>();
+    private Map<FlockModel, JMenuItem> runItems = new IdentityHashMap<>();
+    private Map<FlockModel, JMenuItem> removeItems = new IdentityHashMap<>();
     private Timer timer;
     private Settings settings;
     JFileChooser fc;
@@ -74,6 +76,7 @@ public class GUI {
     private JMenuItem pauseItem;
     private JMenu runItemMenu;
     private JMenuItem frontPageItem;
+    private JMenu removeItemMenu;
     
     private JButton stopButton;
     private JButton pauseButton;
@@ -82,6 +85,7 @@ public class GUI {
     private JButton settingsButton;
     private JComboBox<String> pluginSelector;
     private static final String EMPTY_SELECTOR = "No plug-in loaded";
+    private static final String PLUGIN_PATH = "plugin path";
     
     private IntFieldDescriptor stepsDescriptor;
     private IntFieldDescriptor agentsDescriptor;
@@ -101,9 +105,9 @@ public class GUI {
         this.x = x;
         this.name = name;
         stepsDescriptor = new IntFieldDescriptor("Number of steps", 0, 5000, 500);
-        colorDescriptor = new ComboBoxDescriptor("Color", new String[] {"blue", "red", "green"}, 0);
+        colorDescriptor = new ComboBoxDescriptor("Color", FlockGraphics.AgentColor.displayNames(), 0);
         agentsDescriptor = new IntFieldDescriptor("Number of birds", 0, 200, 50);
-        sizeDescriptor = new ComboBoxDescriptor("Size", new String[] {"small", "medium", "big"}, 1);
+        sizeDescriptor = new ComboBoxDescriptor("Size", FlockGraphics.AgentSize.displayNames(), 1);
     }
 
     /**
@@ -124,21 +128,22 @@ public class GUI {
         
         JPanel buttonMenu = new JPanel();
         buttonMenu.setLayout(new BoxLayout(buttonMenu, BoxLayout.X_AXIS));
-                
+        
         settingsButton = new JButton("Settings");
-        settingsButton.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
-        settingsButton.addActionListener(e -> settings.setVisible(true));
+        Font buttonFont = new Font("Lucida Grande", Font.PLAIN, 13);
+        settingsButton.setFont(buttonFont);
+        settingsButton.addActionListener(e -> showSettings());
         startButton = new JButton("Start");
-        startButton.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+        startButton.setFont(buttonFont);
         startButton.addActionListener(e -> runSimulationWithButton());
         pauseButton = new JButton("Pause");
-        pauseButton.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+        pauseButton.setFont(buttonFont);
         pauseButton.addActionListener(e -> pauseSimulation());
         continueButton = new JButton("Continue");
-        continueButton.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+        continueButton.setFont(buttonFont);
         continueButton.addActionListener(e -> continueSimulation());
         stopButton = new JButton("Stop");
-        stopButton.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+        stopButton.setFont(buttonFont);
         stopButton.addActionListener(e -> stopSimulation());
         pluginSelector = new JComboBox<>();
         pluginSelector.addItem(EMPTY_SELECTOR);
@@ -156,6 +161,7 @@ public class GUI {
         fGraphics = new FlockGraphics();
         fGraphics.setPreferredSize(new Dimension(sizeX, sizeY));
         simulationPanel = new JPanel(true);
+        simulationPanel.setLayout(new BoxLayout(simulationPanel, BoxLayout.Y_AXIS));
         simulationPanel.add(fGraphics);
         simulationPanel.setBackground(Color.WHITE);
         JPanel frontPage = new JPanel();
@@ -191,18 +197,23 @@ public class GUI {
         menuBar.add(runMenu);
         menuBar.add(helpMenu);
         
-        JMenuItem aboutItem = new JMenuItem("About");
+        JMenuItem aboutItem = new JMenuItem("About FlockSim");
         JMenuItem settingsItem = new JMenuItem("Settings");
+        settingsItem.addActionListener(e -> showSettings());
+        JMenuItem quitItem = new JMenuItem("Quit FlockSim");
+        quitItem.addActionListener(e -> frame.dispose());
         applicationMenu.add(aboutItem);
+        applicationMenu.addSeparator();
         applicationMenu.add(settingsItem);
+        applicationMenu.addSeparator();
+        applicationMenu.add(quitItem);
         
         JMenuItem pluginItem = new JMenuItem("Load plug-in");
         pluginItem.addActionListener(e -> loadPlugin());
-        JMenuItem saveItem = new JMenuItem("Save settings");
-        JMenuItem loadItem = new JMenuItem("Load settings");
+        removeItemMenu = new JMenu("Remove plug-in");
+        if (plugins.isEmpty()) removeItemMenu.setEnabled(false);
         fileMenu.add(pluginItem);
-        fileMenu.add(saveItem);
-        fileMenu.add(loadItem);
+        fileMenu.add(removeItemMenu);
        
         runItemMenu = new JMenu("Run simulation");
         runItemMenu.addPropertyChangeListener("enabled", e -> changeEnabledProperty(startButton, e));
@@ -226,10 +237,16 @@ public class GUI {
         runMenu.add(stopItem);
         
         frontPageItem = new JMenuItem("Show front page");
-        helpMenu.add(frontPageItem);
         frontPageItem.addActionListener(e -> showFrontPage());
+        frontPageItem.setEnabled(false);
+        helpMenu.add(frontPageItem);
         
         frame.setJMenuBar(menuBar);
+    }
+    
+    private void showSettings() {
+        settings.setLocationRelativeTo(frame);
+        settings.setVisible(true);
     }
     
     private void runSimulationWithButton() {
@@ -243,26 +260,21 @@ public class GUI {
         int count = params.getInteger(agentsDescriptor);
         String color = params.getString(colorDescriptor);
         String size = params.getString(sizeDescriptor);
-        fGraphics.setColor(decodeColor(color));
-        fGraphics.setSize(decodeSize(size));
+        fGraphics.setColor(FlockGraphics.AgentColor.valueForName(color));
+        fGraphics.setSize(FlockGraphics.AgentSize.valueForName(size));
         pluginSelector.setSelectedIndex(plugins.indexOf(flockModel));
         Parameters pluginParams = settings.getPluginParams(flockModel);
-        simulation = new Flock(sizeY, sizeX, count, flockModel, pluginParams);
-        changeState(State.RUNNING);
-    }
-    
-    private FlockGraphics.AgentColor decodeColor(String color) {
-        if ("blue".equals(color)) return FlockGraphics.AgentColor.BLUE;
-        if ("red".equals(color)) return FlockGraphics.AgentColor.RED;
-        if ("green".equals(color)) return FlockGraphics.AgentColor.GREEN;
-        throw new IllegalArgumentException();
-    }
-    
-    private FlockGraphics.AgentSize decodeSize(String size) {
-        if ("small".equals(size)) return FlockGraphics.AgentSize.SMALL;
-        if ("medium".equals(size)) return FlockGraphics.AgentSize.MEDIUM;
-        if ("big".equals(size)) return FlockGraphics.AgentSize.BIG;
-        throw new IllegalArgumentException();
+        try {
+            simulation = new Flock(simulationPanel.getHeight(),
+                simulationPanel.getWidth(), count, flockModel, pluginParams);
+            changeState(State.RUNNING);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog
+        (frame, "Exeption in plug-in occured\nMessage: "+e.getMessage(), "Exeption", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, "Exeption in plug-in", e);
+            changeState(State.STOPPED);
+            removePlugin(flockModel);
+        }
     }
     
     private void changeEnabledProperty(JComponent component, PropertyChangeEvent e) {
@@ -295,31 +307,67 @@ public class GUI {
                 URL jarPath = file.toURI().toURL();
                 URLClassLoader clsLoader = new URLClassLoader(new URL[]{jarPath});
                 ServiceLoader<FlockModel> sv = ServiceLoader.load(FlockModel.class, clsLoader);
+                if (sv.findFirst().isEmpty()) {
+                    JOptionPane.showMessageDialog(frame,
+                    "Plug-in does not contain correct FlockModel class", "Invalid plug-in", JOptionPane.ERROR_MESSAGE);
+
+                }
                 FlockModel flockModel = sv.findFirst().get();
                 plugins.add(flockModel);
-                JMenuItem pluginItem = new JMenuItem(flockModel.getName());
-                pluginItem.addActionListener(e -> runSimulation(flockModel));
                 settings.addPlugin(flockModel);
-                runItemMenu.add(pluginItem);
-                runItemMenu.setEnabled(true);
-                if (pluginSelector.getItemCount() == 1
-                    && EMPTY_SELECTOR.equals(pluginSelector.getItemAt(0))) {
-                    pluginSelector.removeAllItems();
-                }
-                pluginSelector.addItem(flockModel.getName());
+                addPluginToMenu(flockModel);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
-    private static final String PLUGIN_PATH = "plugin path";
+    
+    private void addPluginToMenu(FlockModel flockModel) {
+        JMenuItem pluginItem = new JMenuItem(flockModel.getName());
+        pluginItem.addActionListener(e -> runSimulation(flockModel));
+        runItems.put(flockModel, pluginItem);
+        runItemMenu.add(pluginItem);
+        runItemMenu.setEnabled(true);
+        if (pluginSelector.getItemCount() == 1
+            && EMPTY_SELECTOR.equals(pluginSelector.getItemAt(0))) {
+            pluginSelector.removeAllItems();
+        }
+        pluginSelector.addItem(flockModel.getName());
+        JMenuItem removeItem = new JMenuItem(flockModel.getName());
+        removeItem.addActionListener(e -> removePlugin(flockModel));
+        removeItems.put(flockModel, removeItem);
+        removeItemMenu.add(removeItem);
+        removeItemMenu.setEnabled(true);
+    }
+    
+    private void removePlugin(FlockModel flockModel) {
+        int index = plugins.indexOf(flockModel);
+        pluginSelector.removeItemAt(index);
+        runItemMenu.remove(runItems.get(flockModel));
+        removeItemMenu.remove(removeItems.get(flockModel));
+        settings.removePlugin(flockModel);
+        plugins.remove(index);
+        if (plugins.isEmpty()) {
+            runItemMenu.setEnabled(false);
+            removeItemMenu.setEnabled(false);
+            pluginSelector.addItem(EMPTY_SELECTOR);
+        }
+    }
     
     private void paintSimulation() {
         if (steps-- > 0) {
             assert state == State.RUNNING;
+            try {
             List<AgentInfo> agents = simulation.doStep();
             fGraphics.setAgents(agents);
             simulationPanel.repaint();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog
+        (frame, "Exeption in plug-in occured\nMessage: "+e.getMessage(), "Exeption", JOptionPane.ERROR_MESSAGE);
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, "Exeption in plug-in", e);
+                changeState(State.STOPPED);
+                removePlugin(simulation.getFlockModel());
+            }
         } else {
             changeState(State.STOPPED);
         }
@@ -337,6 +385,7 @@ public class GUI {
                     case PAUSED:
                         runItemMenu.setEnabled(false);
                         pauseItem.setEnabled(true);
+                        continueItem.setEnabled(false);
                         timer.start();
                         break;
                     case STOPPED:
@@ -346,6 +395,7 @@ public class GUI {
                         pauseItem.setEnabled(true);
                         stopItem.setEnabled(true);
                         frontPageItem.setEnabled(false);
+                        frame.setResizable(false);
                         timer.start();
                         break;
                     default:
@@ -370,15 +420,19 @@ public class GUI {
                     stopItem.setEnabled(false);
                     runItemMenu.setEnabled(true);
                     frontPageItem.setEnabled(true);
+                    frame.setResizable(true);
                 } else {throw new IllegalStateException();}
                 state = State.STOPPED;
                 break;
             case FRONT_PAGE:
                 cardLayout.show(cardsPanel, FRONT_PAGE_PANEL);
                 frontPageItem.setEnabled(false);
-                pauseItem.setEnabled(false);
-                continueItem.setEnabled(false);
-                runItemMenu.setEnabled(true);
+                if (!plugins.isEmpty()) {
+                    pauseItem.setEnabled(false);
+                    continueItem.setEnabled(false);
+                    runItemMenu.setEnabled(true);
+                }
+                frame.setResizable(true);
                 state = State.FRONT_PAGE;
                 break;
             default:
@@ -391,20 +445,6 @@ public class GUI {
         PAUSED,
         STOPPED,
         FRONT_PAGE
-    }
-    
-    private class StopAction extends AbstractAction {
-
-        public StopAction(String text, ImageIcon icon, String desc) {
-            super(text, icon);
-            putValue(SHORT_DESCRIPTION, desc);
-        }
-        
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            changeState(State.STOPPED);
-        }
-        
     }
 
 }

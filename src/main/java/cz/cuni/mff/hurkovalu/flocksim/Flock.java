@@ -26,6 +26,7 @@ public class Flock {
     private PositionsAreas positionsAreas;
     private PositionsAreas oldPositionsAreas;
     private final Parameters params;
+    private final FlockModel flockModel;
     
     /**
      * Creates a new {@link Flock} of specified size, containing specified number of 
@@ -40,9 +41,10 @@ public class Flock {
         this.winHeight = winHeight;
         this.winWidth = winWidth;
         this.params = params;
+        this.flockModel = flockModel;
         
-        areaHeight = winHeight / SIZE_OF_AREA;
-        areaWidth = winWidth / SIZE_OF_AREA;
+        areaHeight = winHeight / SIZE_OF_AREA + 1;
+        areaWidth = winWidth / SIZE_OF_AREA + 1;
         positionsAreas = new PositionsAreas(areaWidth, areaHeight);
         oldPositionsAreas = new PositionsAreas(areaWidth, areaHeight);
                 
@@ -67,6 +69,10 @@ public class Flock {
             Point2D areaPosition = getAreaCoord(position);
             oldPositionsAreas.putAgentInArea(areaPosition, agent.getInfo());
         }
+    }
+    
+    public FlockModel getFlockModel() {
+        return flockModel;
     }
     
     private Point2D normalizeAreaCoord(Point2D position) {

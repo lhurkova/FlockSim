@@ -6,6 +6,8 @@ package cz.cuni.mff.hurkovalu.flocksim;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComponent;
@@ -17,18 +19,15 @@ import javax.swing.JComponent;
 public class FlockGraphics extends JComponent {
     
     private List<AgentInfo> agents = new ArrayList<>();
-    private static final int[] SIZES = new int[] {6, 10, 14};
     private int currSize;
-    private Color[] colors;
     private Color currColor;
     
     /**
      * Creates a new {@link FlockGraphics}. 
      */
     public FlockGraphics() {
-        colors = new Color[] {new Color(0,0,128), new Color(128, 0, 0), new Color(0, 128, 0)};
-        currColor = colors[0];
-        currSize = SIZES[1];
+        currColor = AgentColor.BLUE.getColor();
+        currSize = AgentSize.MEDIUM.getSize();
     }
     
     /**
@@ -44,7 +43,7 @@ public class FlockGraphics extends JComponent {
      * @param color color of the agents
      */
     public void setColor(AgentColor color) {
-        currColor = colors[color.ordinal()];
+        currColor = color.getColor();
     }
     
     /**
@@ -52,7 +51,7 @@ public class FlockGraphics extends JComponent {
      * @param size size of the agents
      */
     public void setSize(AgentSize size) {
-        currSize = SIZES[size.ordinal()];
+        currSize = size.getSize();
     }
     
     private void paintAgent(AgentInfo agent, Graphics g) {
@@ -78,28 +77,85 @@ public class FlockGraphics extends JComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(currColor);
+        Graphics2D g2D = (Graphics2D) g;
+        g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON); 
         for (AgentInfo agent: agents) {
-            paintAgent(agent, g);
+            paintAgent(agent, g2D);
         }
     }
-    
+        
     /**
      * Enum containing possible colors of the agents.
      */
     public enum AgentColor {
-        BLUE,
-        RED,
-        GREEN
+        BLUE("blue", new Color(0,0,128)),
+        RED("red", new Color(128,0,0)),
+        GREEN("green", new Color(0,128,0));
+        
+        private final String displayName;
+        private final Color color;
+
+        private AgentColor(String displayName, Color color) {
+            this.displayName = displayName;
+            this.color = color;
+        }
+
+        public Color getColor() {
+            return color;
+        }
+        
+        public static AgentColor valueForName(String name) {
+            for (AgentColor a: values()) {
+                if (a.displayName.equals(name)) return a;
+            }
+            throw new IllegalArgumentException(name);
+        }
+        
+        public static String[] displayNames() {
+            List<String> names = new ArrayList<>();
+            for (AgentColor a: values()) {
+                names.add(a.displayName);
+            }
+            return names.toArray(String[]::new);
+        }
+        
     }
     
     /**
      * Enum containing possible sizes of the agents.
      */
     public enum AgentSize {
-        SMALL,
-        MEDIUM,
-        BIG
+        SMALL("small", 6),
+        MEDIUM("medium", 8),
+        BIG("big", 10);
+        
+        private String displayName;
+        private int size;
+
+        private AgentSize(String displayName, int size) {
+            this.displayName = displayName;
+            this.size = size;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public static AgentSize valueForName(String name) {
+            for (AgentSize a: values()) {
+                if (a.displayName.equals(name)) return a;
+            }
+            throw new IllegalArgumentException(name);
+        }
+        
+        public static String[] displayNames() {
+            List<String> names = new ArrayList<>();
+            for (AgentSize a: values()) {
+                names.add(a.displayName);
+            }
+            return names.toArray(String[]::new);
+        }
     }
-    
     
 }

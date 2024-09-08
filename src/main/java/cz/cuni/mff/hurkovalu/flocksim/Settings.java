@@ -8,9 +8,11 @@ import cz.cuni.mff.hurkovalu.flocksim.settings.SettingsItem;
 import cz.cuni.mff.hurkovalu.flocksim.descriptors.Descriptor;
 import cz.cuni.mff.hurkovalu.flocksim.settings.Savable;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import java.util.Map;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -33,6 +36,7 @@ public class Settings extends JDialog {
     
     private Map<FlockModel, List<SettingsItem>> pluginsSettings = new IdentityHashMap<>();
     private Map<FlockModel, Parameters> pluginsParams = new IdentityHashMap<>();
+    private List<FlockModel> sortedPlugins = new ArrayList<>();
     private JTabbedPane mainTabbedPane;
     private JPanel simulationSettingsPanel;
     private JTabbedPane pluginsTabbedPane;
@@ -42,6 +46,11 @@ public class Settings extends JDialog {
     private Parameters simulationParams;
     private List<SettingsItem> simulationSettings;
     private Frame owner;
+    private JPanel emptyPanel;
+    private CardLayout cardLayout;
+    private JPanel cardsPanel;
+    private static final String EMPTY_SETTINGS = "No plug-ins loaded";
+    private static final String PLUGINS_TABS = "Plugins tabbed pane";
     
     /**
      * Creates a new {@link Settings} dialog with specified owner and main simulation
@@ -75,19 +84,30 @@ public class Settings extends JDialog {
         
         mainTabbedPane.add("Simulation", simulationSettingsPanel);
         
+        cardLayout = new CardLayout();
+        cardsPanel = new JPanel(cardLayout);
+        emptyPanel = new JPanel(new GridBagLayout());
+        emptyPanel.add(new JLabel(EMPTY_SETTINGS));
         
         pluginsSettingsPanel = new JPanel();
         pluginsSettingsPanel.setLayout(new BoxLayout(pluginsSettingsPanel, BoxLayout.Y_AXIS));
 //        mainTabbedPane.addTab("Plug-ins", pluginsSettingsPanel);
         pluginsTabbedPane = new JTabbedPane();
         JScrollPane scroll = new JScrollPane(pluginsSettingsPanel);
-        mainTabbedPane.addTab("Plug-ins", scroll);
+        
+        cardsPanel.add(scroll, PLUGINS_TABS);
+        cardsPanel.add(emptyPanel, EMPTY_SETTINGS);
+        cardLayout.show(cardsPanel, EMPTY_SETTINGS);
+        
+        mainTabbedPane.addTab("Plug-ins", cardsPanel);
         pluginsSettingsPanel.add(pluginsTabbedPane);
         getContentPane().add(mainTabbedPane, BorderLayout.CENTER);
+        JPanel buttonPanel = new JPanel();
         JButton closeButton = new JButton("Close");
         closeButton.addActionListener(e -> {this.setVisible(false);
                                             saveSettings();});
-        getContentPane().add(closeButton, BorderLayout.SOUTH);
+        buttonPanel.add(closeButton);
+        getContentPane().add(buttonPanel, BorderLayout.SOUTH);
         pack();
     }
     
@@ -126,6 +146,17 @@ public class Settings extends JDialog {
         List<SettingsItem> pluginSettings = createPluginSettings(plugin);
         pluginsSettings.put(plugin, pluginSettings);
         pluginsParams.put(plugin, new Parameters());
+        cardLayout.show(cardsPanel, PLUGINS_TABS);
+    }
+    
+    public void removePlugin(FlockModel plugin) {
+        pluginsTabbedPane.removeTabAt(sortedPlugins.indexOf(plugin));
+        sortedPlugins.remove(plugin);
+        pluginsParams.remove(plugin);
+        pluginsSettings.remove(plugin);
+        if (sortedPlugins.isEmpty()) {
+            cardLayout.show(cardsPanel, EMPTY_SETTINGS);
+        }
     }
     
     private List<SettingsItem> createPluginSettings(FlockModel plugin) {
@@ -138,7 +169,8 @@ public class Settings extends JDialog {
             settingsItems.add(item);
             pluginPanel.add(item);
         }
-        pluginsTabbedPane.add(plugin.getName(), pluginPanel);
+        pluginsTabbedPane.addTab(plugin.getName(), pluginPanel);
+        sortedPlugins.add(plugin);
         return settingsItems;
     }
     
