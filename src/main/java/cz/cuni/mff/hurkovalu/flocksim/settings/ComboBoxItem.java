@@ -24,7 +24,7 @@ public class ComboBoxItem extends SettingsItem {
     public ComboBoxItem(ComboBoxDescriptor descriptor) {
         super(descriptor);
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        add(new JLabel(descriptor.getDescription(), JLabel.TRAILING));
+        add(new JLabel(descriptor.getDescription()+" ", JLabel.TRAILING));
         comboBox = new JComboBox<>(descriptor.getOptions());
         comboBox.setSelectedIndex(descriptor.getDefaultValue());
         add(comboBox);

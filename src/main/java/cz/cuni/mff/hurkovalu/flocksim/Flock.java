@@ -43,8 +43,8 @@ public class Flock {
         this.params = params;
         this.flockModel = flockModel;
         
-        areaHeight = winHeight / SIZE_OF_AREA + 1;
-        areaWidth = winWidth / SIZE_OF_AREA + 1;
+        areaHeight = Math.ceilDiv(winHeight, SIZE_OF_AREA);
+        areaWidth = Math.ceilDiv(winWidth, SIZE_OF_AREA);
         positionsAreas = new PositionsAreas(areaWidth, areaHeight);
         oldPositionsAreas = new PositionsAreas(areaWidth, areaHeight);
                 

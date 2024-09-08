@@ -49,7 +49,7 @@ public class SliderItem extends SettingsItem {
         slider.setPaintTicks(true);
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
-        JLabel description = new JLabel(descriptor.getDescription());
+        JLabel description = new JLabel(descriptor.getDescription()+" ");
         add(description);
         add(slider);
     }

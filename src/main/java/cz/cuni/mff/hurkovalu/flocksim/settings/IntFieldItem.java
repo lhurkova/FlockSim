@@ -37,7 +37,7 @@ public class IntFieldItem extends SettingsItem implements Savable {
         max = descriptor.getMax();
         savedValue = descriptor.getDefaultValue();
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        add(new JLabel(descriptor.getDescription(), JLabel.TRAILING));
+        add(new JLabel(descriptor.getDescription()+" ", JLabel.TRAILING));
         textField = new JTextField();
         textField.setText(Integer.toString(descriptor.getDefaultValue()));
         verifier = new Verifier();

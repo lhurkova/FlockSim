@@ -10,11 +10,18 @@ import cz.cuni.mff.hurkovalu.flocksim.descriptors.IntFieldDescriptor;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -26,6 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -63,7 +71,8 @@ public class GUI {
     private Map<FlockModel, JMenuItem> removeItems = new IdentityHashMap<>();
     private Timer timer;
     private Settings settings;
-    JFileChooser fc;
+    private JFileChooser fc;
+    private AboutDialog aboutDialog;
     
     private CardLayout cardLayout;
     private JPanel cardsPanel;
@@ -120,6 +129,8 @@ public class GUI {
         frame = new JFrame(name);
         frame.setLocation(x, 0);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        URL resource = getClass().getResource("icon.png");
+        frame.setIconImage(Toolkit.getDefaultToolkit().getImage(resource));
                 
         timer = new Timer(100, e -> paintSimulation());
         fc = new JFileChooser();
@@ -166,17 +177,18 @@ public class GUI {
         simulationPanel.setBackground(Color.WHITE);
         JPanel frontPage = new JPanel();
         frontPage.setPreferredSize(new Dimension(sizeX, sizeY));
-        JLabel label = new JLabel("Front Page");
-        frontPage.add(label);
-        
+                
         cardLayout = new CardLayout();
         cardsPanel = new JPanel(cardLayout);
         cardsPanel.add(frontPage, FRONT_PAGE_PANEL);
         cardsPanel.add(simulationPanel, SIM_PANEL);
         cardLayout.show(cardsPanel, FRONT_PAGE_PANEL);
+        createFrontPage(frontPage);
         
         settings = new Settings(frame, new Descriptor[] {stepsDescriptor,
-            agentsDescriptor, colorDescriptor, sizeDescriptor});        
+            agentsDescriptor, colorDescriptor, sizeDescriptor});
+        
+        aboutDialog = new AboutDialog(frame);
         
         frame.getContentPane().add(toolBar, BorderLayout.NORTH);
         frame.getContentPane().add(cardsPanel, BorderLayout.CENTER);
@@ -198,6 +210,8 @@ public class GUI {
         menuBar.add(helpMenu);
         
         JMenuItem aboutItem = new JMenuItem("About FlockSim");
+        aboutItem.addActionListener(e -> {aboutDialog.setLocationRelativeTo(frame);
+            aboutDialog.setVisible(true);});
         JMenuItem settingsItem = new JMenuItem("Settings");
         settingsItem.addActionListener(e -> showSettings());
         JMenuItem quitItem = new JMenuItem("Quit FlockSim");
@@ -239,9 +253,46 @@ public class GUI {
         frontPageItem = new JMenuItem("Show front page");
         frontPageItem.addActionListener(e -> showFrontPage());
         frontPageItem.setEnabled(false);
+        JMenuItem docsItem = new JMenuItem("Online docs");
+        docsItem.addActionListener(e -> browsDocs());
+        helpMenu.add(docsItem);
+        helpMenu.addSeparator();
         helpMenu.add(frontPageItem);
         
         frame.setJMenuBar(menuBar);
+    }
+    
+    private void createFrontPage(JPanel frontPage) {
+        frontPage.setBackground(Color.WHITE);
+        frontPage.setLayout(new GridBagLayout());
+        JPanel mainPanel = new JPanel();
+        mainPanel.setOpaque(false);
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        URL resource = getClass().getResource("front_page.png");
+        Image image = Toolkit.getDefaultToolkit().getImage(resource);
+        ImageIcon icon = new ImageIcon(image.getScaledInstance(1000, 600, Image.SCALE_SMOOTH));
+        JLabel imageLabel = new JLabel();
+        imageLabel.setIcon(icon);
+        JPanel titlePanel = new JPanel(new GridBagLayout());
+        titlePanel.setOpaque(false);
+        JLabel textLabel = new JLabel("FlockSim");
+        textLabel.setFont(new Font("Lucida Grande", Font.BOLD, 45));
+        textLabel.setForeground(new Color(0,0,128));
+        titlePanel.add(textLabel);
+        mainPanel.add(titlePanel);
+        JPanel imagePanel = new JPanel(new GridBagLayout());
+        imagePanel.setOpaque(false);
+        imagePanel.add(imageLabel);
+        mainPanel.add(imagePanel);
+        frontPage.add(mainPanel);
+    }
+    
+    private void browsDocs() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://github.com/lhurkova/FlockSim"));
+        } catch (IOException | URISyntaxException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void showSettings() {
@@ -310,12 +361,12 @@ public class GUI {
                 if (sv.findFirst().isEmpty()) {
                     JOptionPane.showMessageDialog(frame,
                     "Plug-in does not contain correct FlockModel class", "Invalid plug-in", JOptionPane.ERROR_MESSAGE);
-
+                } else {
+                    FlockModel flockModel = sv.findFirst().get();
+                    plugins.add(flockModel);
+                    settings.addPlugin(flockModel);
+                    addPluginToMenu(flockModel);
                 }
-                FlockModel flockModel = sv.findFirst().get();
-                plugins.add(flockModel);
-                settings.addPlugin(flockModel);
-                addPluginToMenu(flockModel);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
