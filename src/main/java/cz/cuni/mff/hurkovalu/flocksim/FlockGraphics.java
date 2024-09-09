@@ -14,7 +14,7 @@ import javax.swing.JComponent;
 
 /**
  * Class for painting the agents in flocking simulation.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public class FlockGraphics extends JComponent {
     
@@ -86,11 +86,20 @@ public class FlockGraphics extends JComponent {
     }
         
     /**
-     * Enum containing possible colors of the agents.
+     * Enum containing possible colors of the agents used in FlockSim GUI.
      */
     public enum AgentColor {
+        /**
+         * Blue color.
+         */
         BLUE("blue", new Color(0,0,128)),
+        /**
+         * Red color.
+         */
         RED("red", new Color(128,0,0)),
+        /**
+         * Green color.
+         */
         GREEN("green", new Color(0,128,0));
         
         private final String displayName;
@@ -101,10 +110,19 @@ public class FlockGraphics extends JComponent {
             this.color = color;
         }
 
+        /**
+         * Gets color matching to the enum item.
+         * @return corresponding color
+         */
         public Color getColor() {
             return color;
         }
         
+        /**
+         * Gets an enum item corresponding to the given name.
+         * @param name display name of a enum item
+         * @return corresponding enum item
+         */
         public static AgentColor valueForName(String name) {
             for (AgentColor a: values()) {
                 if (a.displayName.equals(name)) return a;
@@ -112,6 +130,10 @@ public class FlockGraphics extends JComponent {
             throw new IllegalArgumentException(name);
         }
         
+        /**
+         * Gets display names of all items in the enum.
+         * @return names of all items
+         */
         public static String[] displayNames() {
             List<String> names = new ArrayList<>();
             for (AgentColor a: values()) {
@@ -123,11 +145,20 @@ public class FlockGraphics extends JComponent {
     }
     
     /**
-     * Enum containing possible sizes of the agents.
+     * Enum containing possible sizes of the agents used in FlockSim GUI.
      */
     public enum AgentSize {
+        /**
+         * Small size.
+         */
         SMALL("small", 6),
+        /**
+         * Medium size.
+         */
         MEDIUM("medium", 8),
+        /**
+         * Big size.
+         */
         BIG("big", 10);
         
         private String displayName;
@@ -138,10 +169,19 @@ public class FlockGraphics extends JComponent {
             this.size = size;
         }
 
+        /**
+         * Gets size matching to the enum item.
+         * @return corresponding size
+         */
         public int getSize() {
             return size;
         }
 
+        /**
+         * Gets an enum item corresponding to the given name.
+         * @param name display name of a enum item
+         * @return corresponding enum item
+         */
         public static AgentSize valueForName(String name) {
             for (AgentSize a: values()) {
                 if (a.displayName.equals(name)) return a;
@@ -149,6 +189,10 @@ public class FlockGraphics extends JComponent {
             throw new IllegalArgumentException(name);
         }
         
+        /**
+         * Gets display names of all items in the enum.
+         * @return names of all items
+         */
         public static String[] displayNames() {
             List<String> names = new ArrayList<>();
             for (AgentSize a: values()) {

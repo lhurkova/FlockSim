@@ -7,7 +7,7 @@ package cz.cuni.mff.hurkovalu.flocksim.descriptors;
 /**
  * Class for a description of a simulation parameter that in GUI will be implemented with
  * a JSlider.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public class SliderDescriptor extends Descriptor {
     

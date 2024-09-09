@@ -9,8 +9,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
 /**
- * Class representing a settings item in FlockSim GUI containing a JComboBox.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * Class representing a settings item in FlockSim GUI containing a {@link JComboBox}.
+ * @author Lucie Hurkova
  */
 public class ComboBoxItem extends SettingsItem {
     

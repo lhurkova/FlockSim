@@ -6,7 +6,7 @@ package cz.cuni.mff.hurkovalu.flocksim;
 
 /**
  * Class representing a point or vector in three dimensional Euclidean space.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public class Point {
     
@@ -127,7 +127,7 @@ public class Point {
      * @throws IllegalArgumentException if the vector does not have zero z coordinate
      */
     public Point getOrtogonalVector() throws IllegalArgumentException {
-        if (z != 0) {
+        if (Math.abs(z) > 1e-5) {
             throw new IllegalArgumentException("Only applicable on 2D vectors");
         }
         return new Point(y, -x, 0);
@@ -139,7 +139,7 @@ public class Point {
      * @return new vector turned by given anle
      */
     public Point getVectorTurnedBy(double angle) {
-        if (z != 0) {
+        if (Math.abs(z) > 1e-5) {
             throw new IllegalArgumentException("Only applicable on 2D vectors");
         }
         double sin = Math.sin(angle);

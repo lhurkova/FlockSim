@@ -8,7 +8,7 @@ import javax.swing.SwingUtilities;
 
 /**
  * Main class of the FlockSim. Creates the graphical user interface.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public class FlockSim {
 
@@ -17,7 +17,7 @@ public class FlockSim {
      * @param args program arguments
      */
     public static void main(String[] args) {
-        GUI g = new GUI(1000, 700, 20, "FlockSim");
+        GUI g = new GUI(1000, 700, "FlockSim");
         SwingUtilities.invokeLater(() -> g.createGUI());
     }
 }

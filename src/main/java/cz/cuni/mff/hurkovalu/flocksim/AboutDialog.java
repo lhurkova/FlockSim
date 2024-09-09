@@ -17,11 +17,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- *
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * Dialog containing short information about the FlockSim.
+ * @author Lucie Hurkova
  */
 public class AboutDialog extends JDialog {
 
+    /**
+     * Creates a new {@link AboutDialog} with specified owner.
+     * @param owner parent frame
+     */
     public AboutDialog(Frame owner) {
         super(owner, "About FlockSim", true);
         JPanel panel = new JPanel();

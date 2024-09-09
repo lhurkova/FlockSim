@@ -14,7 +14,7 @@ import javax.swing.border.EmptyBorder;
 
 /**
  * Class representing a settings item in FlockSim GUI.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public abstract class SettingsItem extends JPanel {
     

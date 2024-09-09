@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Class for storing parameter values for the flocking simulation. Values can be
  * stored and accessed with corresponding {@link Descriptor}.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public class Parameters {
     

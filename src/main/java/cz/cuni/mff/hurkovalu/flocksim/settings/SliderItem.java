@@ -14,12 +14,12 @@ import javax.swing.JLabel;
 import javax.swing.JSlider;
 
 /**
- * Class representing a settings item in FlockSim GUI containing a JSlider.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * Class representing a settings item in FlockSim GUI containing a {@link JSlider}.
+ * @author Lucie Hurkova
  */
 public class SliderItem extends SettingsItem {
     
-    JSlider slider;
+    private JSlider slider;
     
     /**
      * Creates a new {@link SliderItem} based on a specified descriptor.

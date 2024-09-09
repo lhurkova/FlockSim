@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * Class representing a state of the agent in agent-based flocking simulation.
  * Class contains a specified position and velocity vector an agent.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public class AgentInfo {
     

@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Class for storing agents in areas for quick searching.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public class PositionsAreas {
     private AgentList[][] agents;

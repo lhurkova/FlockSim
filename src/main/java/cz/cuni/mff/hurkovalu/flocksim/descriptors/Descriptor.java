@@ -6,7 +6,7 @@ package cz.cuni.mff.hurkovalu.flocksim.descriptors;
 
 /**
  * Abstract class for a description of a simulation parameter.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public abstract class Descriptor {
     
@@ -43,9 +43,17 @@ public abstract class Descriptor {
      * Enum containing types of descriptor used in FlockSim.
      */
     public enum Type {
+        /**
+         * Item representing a {@link IntFieldDescriptor}.
+         */
         INT_FIELD,
+        /**
+         * Item representing a {@link ComboBoxDescriptor}.
+         */
         COMBO_BOX,
-        CHECK_BOX,
+        /**
+         * Item representing a {@link SliderDescriptor}
+         */
         SLIDER
     }
 }

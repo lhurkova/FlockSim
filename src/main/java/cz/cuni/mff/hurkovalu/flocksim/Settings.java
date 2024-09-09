@@ -30,7 +30,7 @@ import javax.swing.JTextField;
 
 /**
  * Class representing settings window in graphical user interface.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public class Settings extends JDialog {
     
@@ -149,6 +149,10 @@ public class Settings extends JDialog {
         cardLayout.show(cardsPanel, PLUGINS_TABS);
     }
     
+    /**
+     * Removes the specified plugin from the settings.
+     * @param plugin plugin to be removed
+     */
     public void removePlugin(FlockModel plugin) {
         pluginsTabbedPane.removeTabAt(sortedPlugins.indexOf(plugin));
         sortedPlugins.remove(plugin);

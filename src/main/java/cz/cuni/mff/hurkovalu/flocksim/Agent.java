@@ -6,7 +6,7 @@ package cz.cuni.mff.hurkovalu.flocksim;
 
 /**
  * Interface representing an agent in agent-based flocking simulation.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public interface Agent {
     /**

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Interface representing a flock model that can be used for creating instances of 
  * specif {@link Agent} implementation and getting information about the implementation.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public interface FlockModel {
     /**

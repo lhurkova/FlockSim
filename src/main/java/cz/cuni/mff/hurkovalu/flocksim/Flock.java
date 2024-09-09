@@ -12,7 +12,7 @@ import java.util.Random;
  * Class representing a flock in agent-based flocking simulation. Flock exists in
  * an area of two dimensional space of specified size and contains a specified number
  * of flock members - {@link Agent}s.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public class Flock {
     
@@ -71,6 +71,10 @@ public class Flock {
         }
     }
     
+    /**
+     * Gets flock model that this {@link Flock} is using.
+     * @return used flock model
+     */
     public FlockModel getFlockModel() {
         return flockModel;
     }

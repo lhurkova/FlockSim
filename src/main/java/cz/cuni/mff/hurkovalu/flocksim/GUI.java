@@ -53,7 +53,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Class representing the graphical user interface of the FlockSim.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public class GUI {
 
@@ -62,7 +62,6 @@ public class GUI {
     private int sizeX;
     private int sizeY;
     private String name;
-    private final int x;
     private Flock simulation;
     private int steps = 1000;
     private State state = State.FRONT_PAGE;
@@ -103,15 +102,13 @@ public class GUI {
 
     /**
      * Creates a new instance of the {@link GUI} of specified window size.
-     * @param sizeX
-     * @param sizeY
-     * @param x
-     * @param name 
+     * @param sizeX width of the window
+     * @param sizeY height of the window
+     * @param name name of the window
      */
-    public GUI(int sizeX, int sizeY, int x, String name) {
+    public GUI(int sizeX, int sizeY, String name) {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
-        this.x = x;
         this.name = name;
         stepsDescriptor = new IntFieldDescriptor("Number of steps", 0, 5000, 500);
         colorDescriptor = new ComboBoxDescriptor("Color", FlockGraphics.AgentColor.displayNames(), 0);
@@ -127,7 +124,7 @@ public class GUI {
         ToolTipManager.sharedInstance().setInitialDelay(100);
         ToolTipManager.sharedInstance().setDismissDelay(20000);
         frame = new JFrame(name);
-        frame.setLocation(x, 0);
+        frame.setLocation(20, 0);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         URL resource = getClass().getResource("icon.png");
         frame.setIconImage(Toolkit.getDefaultToolkit().getImage(resource));

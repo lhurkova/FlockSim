@@ -13,9 +13,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 /**
- * Class representing a settings item in FlockSim GUI containing a JTextFiled that
- * allows only integer values inside a specified range.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * Class representing a settings item in FlockSim GUI containing a {@link JTextField}
+ * that allows only integer values inside a specified range.
+ * @author Lucie Hurkova
  */
 public class IntFieldItem extends SettingsItem implements Savable {
     
