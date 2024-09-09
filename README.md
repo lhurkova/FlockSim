@@ -53,6 +53,8 @@ Separation force
 
 Clear view force
 - how much is the bird tying to find a place in the flock with a clear view
+#### References
+Nathan, A., & Barbosa, V. C. (2008). V-like formations in flocks of artificial birds. Artificial life, 14(2), 179-188.
 
 ### BoidsAgent plug-in
 VFlockAgent plug-in is used for simulating a fromation nad behavior of flocks. Plug-in is inspired by BOIDS model. Each bird in the flock only reacts to its surrounding and in each step of the simulatin tries to get to the center of the flock, align its direction with other birds and get away from birds that are too close. 
@@ -76,6 +78,8 @@ Separation force
 
 Alignment force
 - how much is the bird tying to align its direction with other birds
+#### References
+Reynolds, C. W. (1987) Flocks, Herds, and Schools: A Distributed Behavioral Model, in Computer Graphics, 21(4) (SIGGRAPH '87 Conference Proceedings) pages 25-34.
 
 ### Implementing your own plug-in
 To create your own plug-in you have to implement *cz.cuni.mff.hurkovalu.flocksim.spi.FlockModel* and *cz.cuni.mff.hurkovalu.flocksim.spi.Agent* interfaces. While implementing the interfaces use classes inside the *cz.cuni.mff.hurkovalu.flocksim.spi* package and class *cz.cuni.mff.hurkovalu.flocksim.Flock* that provides several methods that can be used to get information about the flock. FlockSim also supports display and modification of the plug-in parameters in graphical user interface. To define your own parameter that would be displayed in FlockSim use descriptors in *cz.cuni.mff.hurkovalu.flocksim.spi.descriptors* package.
