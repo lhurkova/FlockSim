@@ -3,7 +3,7 @@
 ### Introduction
 FlockSim is a simulation enviroment used for agent-based flocking simulations. Application is based on plug-ins that can be loaded and used for the simulation. Plug-ins represents flocking models with different behavior and parameters and FlockSim already contains two plug-ins ready to use. FlockSim has a graphical user interface and displays graphically the course of the simulation.
 ### Build the FlockSim
-To build the simulatin use `mvn compile` in ./FlockSim directory of the project.
+To build the simulatin use `mvn install` in ./FlockSim directory of the project.
 ### Run the FlockSim
 Project needs to be run on JDK 21 or newer. To run the FlockSim use `mvn exec:java` in ./FlockSim directory of the project.
 ### Graphical User Interface
@@ -31,7 +31,7 @@ Option "*Help*" contains link for additional infromation.
 Settings dialog can be dislays be selecting "*FlockSim*" > "*Settings*" in menu or clicking "*Settings*" button in toolbar. Settings contains two tabbes called "*Simulation*" and "*Plug-ins*". "*Simulation*" tab contains basic simulation parameters that are independent of the plug-ins, for example: number of steps of the simulation, number of birds in the simulation, color of the birds and size of the birds. "*Plug-ins*" tab contains parameters for loaded plug-ins and each plug-in has its own tab with prameters with its own name.
 ### VFlockAgent plug-in
 VFlockAgent plug-in is used for simulating
-the fromation of a V-shaped flock inspired by V-shaped flocks formed by geese and other large birds. To use this plug-in in FlockSim you have to first build the pluigin with executing `mvn compile` command in ./VFlockAgent directory of the project. To load VFlockAgent plug-in you have to select "*File*" > "*Load plug-in*" in FlockSim menu and choose JAR file created while building the VFlockAgent subproject. After loading select the "V-Flock Model" in toolbar or menu of the FlockSim and run the simulation. To change parameters open "*FlockSim*" > "*Settings*" and select "Plug-ins" tab and then "V-Flock Model".
+the fromation of a V-shaped flock inspired by V-shaped flocks formed by geese and other large birds. To use this plug-in in FlockSim you have to first build the pluigin with executing `mvn install` command in ./VFlockAgent directory of the project. To load VFlockAgent plug-in you have to select "*File*" > "*Load plug-in*" in FlockSim menu and choose JAR file created while building the VFlockAgent subproject. After loading select the "V-Flock Model" in toolbar or menu of the FlockSim and run the simulation. To change parameters open "*FlockSim*" > "*Settings*" and select "Plug-ins" tab and then "V-Flock Model".
 #### Parameters
 View of the bird
 - how far can bird see, bird only reacts to other birds that are inside the range of its view
@@ -59,7 +59,7 @@ Clear view force
 ### BoidsAgent plug-in
 VFlockAgent plug-in is used for simulating a fromation nad behavior of flocks. Plug-in is inspired by BOIDS model. Each bird in the flock only reacts to its surrounding and in each step of the simulatin tries to get to the center of the flock, align its direction with other birds and get away from birds that are too close. 
 
-To use this plug-in in FlockSim you have to first build the pluigin with executing `mvn compile` command in ./BoidsAgent directory of the project. To load BoidsAgent plug-in you have to select "*File*" > "*Load plug-in*" in FlockSim menu and choose JAR file created while building the BoidsAgent subproject. After loading select the "BOIDS Model" in toolbar or menu of the FlockSim and run the simulation. To change parameters open "*FlockSim"* > "*Settings*" and select "Plug-ins" tab and then "BOIDS Model".
+To use this plug-in in FlockSim you have to first build the pluigin with executing `mvn install` command in ./BoidsAgent directory of the project. To load BoidsAgent plug-in you have to select "*File*" > "*Load plug-in*" in FlockSim menu and choose JAR file created while building the BoidsAgent subproject. After loading select the "BOIDS Model" in toolbar or menu of the FlockSim and run the simulation. To change parameters open "*FlockSim"* > "*Settings*" and select "Plug-ins" tab and then "BOIDS Model".
 #### Parameters
 View of the bird
 - how far can bird see, bird only reacts to other birds that are inside the range of its view
