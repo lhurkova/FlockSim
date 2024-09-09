@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Class for creating {@link VFlockAgent} instances and getting information about
  * the {@link VFlockAgent} class.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public class FlockModelImpl implements FlockModel {
     

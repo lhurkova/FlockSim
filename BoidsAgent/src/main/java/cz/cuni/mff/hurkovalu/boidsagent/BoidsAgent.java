@@ -18,7 +18,7 @@ import java.util.List;
  * is based on three main rules: agent is trying to get closer to the center of the flock;
  * agent is aligning its direction with surrounding agents; if an agent is to close
  * to another agent, it is trying to put more distance between them.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public class BoidsAgent implements Agent {
     

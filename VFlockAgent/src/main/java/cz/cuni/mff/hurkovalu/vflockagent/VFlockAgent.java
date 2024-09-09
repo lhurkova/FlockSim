@@ -17,7 +17,7 @@ import java.util.List;
  * that are often created by geese. In each step {@link VFlockAgent} is trying to get
  * closer to its closest neighbour in the flock and at the same time it is searching for
  * a position with a clear view in front of it.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @author Lucie Hurkova
  */
 public class VFlockAgent implements Agent {
     

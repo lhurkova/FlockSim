@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+  <HEAD>
+    <TITLE>Overview of FlockSim</TITLE>
+  </HEAD>
+  <BODY>
+      <h1>Short overview of the FlockSim</h1>
+      <p>
+      FlockSim is a simulation enviroment used for agent-based flocking simulations. Application is based on plug-ins that can be loaded and used for the simulation. Plug-ins represents flocking models with different behavior and parameters. FlockSim has a graphical user interface and displays graphically the course of the simulation.
+      </p>
+      <h1>Simulation proces</h1>
+      <p>
+      After loading a plug-in simulation can be run. First specified number of agents (representing birds) are initialized with random positions and random velocity vectors. Than a specified number of steps is executed. During each step of the simulation all agents execute their steps and graphical component is repainted.
+      </p>
+      <h1>Program structure</h1>
+      <p>
+      Main class of FlockSim is <b>FlockSim</b>. <b>FlockSim</b> initialize the graphical user interface represented by <b>GUI</b> class. <b>GUI</b> uses the <b>FlockGraphics</b> class to graphically display the course of the simulation and classes <b>AboutDialog</b> and <b>Settings</b> to dispaly about a settings dialogs. Class <b>Point</b> represents a point in  Euclidean space and provides basic geometric operations with points and vectors. Class <b>Point2D</b> representa a point in 2D space.
+      </p>
+      <p>
+      Class <b>Flock</b> represents a flock during the simulation. It contains <b>Agent</b>s that are stepped during each step of the simulation. <b>FlockModel</b> is an interface that defines methods for creating <b>Agent</b>s and getting informatin about specific implementations of a <b>Agent</b> interface. <b>AreaPositions</b> class is a supporting class for <b>Flock</b> that help with finding agents in specified areas.
+      </p>
+      <p>
+      Parameters of <b>FlockModel</b> and <b>Agents</b> can be described by classes extending the class <b>Descriptor</b> such as <b>ComboBoxDescriptor</b>, <b>IntFieldDescriptor</b> and <b>SliderDescriptor</b>. Each descriptor has its grafical representation implemented by classes <b>ComboBoxItem</b>, <b>IntFieldItem</b> and <b>SliderItem</b> that all extend <b>SettingsItem</b> class. Settings items are graphically displayed in settings dialog and values from them inputed by the user are storen in <b>Parameters</b> class.
+      </p>
+  </BODY>
+</HTML>
+          

@@ -6,7 +6,9 @@ package cz.cuni.mff.hurkovalu.vflockagent;
 
 /**
  * Class representing a gap in space between two agents.
- * @author Lucie Hurkova <hurkova.lucie@email.cz>
+ * @param start start of the gap
+ * @param end end of the gap
+ * @author Lucie Hurkova
  */
 public record Gap(double start, double end) {
     

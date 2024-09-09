@@ -113,10 +113,10 @@ public class GUI {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.name = name;
-        stepsDescriptor = new IntFieldDescriptor("Number of steps", 0, 5000, 500);
-        colorDescriptor = new ComboBoxDescriptor("Color", FlockGraphics.AgentColor.displayNames(), 0);
+        stepsDescriptor = new IntFieldDescriptor("Steps of the simulation", 0, 5000, 500);
+        colorDescriptor = new ComboBoxDescriptor("Color of birds", FlockGraphics.AgentColor.displayNames(), 0);
         agentsDescriptor = new IntFieldDescriptor("Number of birds", 0, 200, 50);
-        sizeDescriptor = new ComboBoxDescriptor("Size", FlockGraphics.AgentSize.displayNames(), 1);
+        sizeDescriptor = new ComboBoxDescriptor("Size of birds", FlockGraphics.AgentSize.displayNames(), 1);
     }
 
     /**

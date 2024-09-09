@@ -31,7 +31,8 @@ public interface FlockModel {
     public String getName();
     
     /**
-     * Gets descriptors that specify flock model parameters.
+     * Gets descriptors that specify flock model parameters or empty list if there
+     * are no parameters.
      * @return descriptors that specify flock model parameters
      */
     public List<Descriptor> getDescriptors();

@@ -37,3 +37,6 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 
 /nbproject/
+/FlockSim/nbproject/
+/VFlockAgent/nbproject/
+/BoidsAgent/nbproject/
