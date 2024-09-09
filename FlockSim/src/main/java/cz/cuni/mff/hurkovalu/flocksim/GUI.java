@@ -356,7 +356,7 @@ public class GUI {
                 File file = fc.getSelectedFile();
                 pref.put(PLUGIN_PATH, file.getAbsolutePath());
                 URL jarPath = file.toURI().toURL();
-                URLClassLoader clsLoader = new URLClassLoader(new URL[]{jarPath});
+                URLClassLoader clsLoader = new URLClassLoader(new URL[]{jarPath}, getClass().getClassLoader());
                 ServiceLoader<FlockModel> sv = ServiceLoader.load(FlockModel.class, clsLoader);
                 if (sv.findFirst().isEmpty()) {
                     JOptionPane.showMessageDialog(frame,
