@@ -4,7 +4,11 @@
  */
 package cz.cuni.mff.hurkovalu.flocksim;
 
-import cz.cuni.mff.hurkovalu.flocksim.descriptors.Descriptor;
+import cz.cuni.mff.hurkovalu.flocksim.spi.Agent;
+import cz.cuni.mff.hurkovalu.flocksim.spi.Point;
+import cz.cuni.mff.hurkovalu.flocksim.spi.AgentInfo;
+import cz.cuni.mff.hurkovalu.flocksim.spi.FlockModel;
+import cz.cuni.mff.hurkovalu.flocksim.spi.descriptors.Descriptor;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

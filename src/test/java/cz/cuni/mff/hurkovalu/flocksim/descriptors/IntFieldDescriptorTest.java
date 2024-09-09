@@ -4,6 +4,7 @@
  */
 package cz.cuni.mff.hurkovalu.flocksim.descriptors;
 
+import cz.cuni.mff.hurkovalu.flocksim.spi.descriptors.IntFieldDescriptor;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

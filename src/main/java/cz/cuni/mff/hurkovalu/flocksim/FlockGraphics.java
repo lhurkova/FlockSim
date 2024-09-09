@@ -4,6 +4,8 @@
  */
 package cz.cuni.mff.hurkovalu.flocksim;
 
+import cz.cuni.mff.hurkovalu.flocksim.spi.AgentInfo;
+import cz.cuni.mff.hurkovalu.flocksim.spi.Point;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;

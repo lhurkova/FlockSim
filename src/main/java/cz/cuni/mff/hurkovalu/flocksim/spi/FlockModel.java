@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package cz.cuni.mff.hurkovalu.flocksim;
+package cz.cuni.mff.hurkovalu.flocksim.spi;
 
-import cz.cuni.mff.hurkovalu.flocksim.descriptors.Descriptor;
+import cz.cuni.mff.hurkovalu.flocksim.Flock;
+import cz.cuni.mff.hurkovalu.flocksim.spi.descriptors.Descriptor;
 import java.util.List;
 
 /**

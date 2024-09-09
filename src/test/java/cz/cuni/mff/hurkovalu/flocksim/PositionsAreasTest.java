@@ -4,6 +4,8 @@
  */
 package cz.cuni.mff.hurkovalu.flocksim;
 
+import cz.cuni.mff.hurkovalu.flocksim.spi.Point;
+import cz.cuni.mff.hurkovalu.flocksim.spi.AgentInfo;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;

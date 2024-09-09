@@ -4,9 +4,12 @@
  */
 package cz.cuni.mff.hurkovalu.flocksim;
 
-import cz.cuni.mff.hurkovalu.flocksim.descriptors.ComboBoxDescriptor;
-import cz.cuni.mff.hurkovalu.flocksim.descriptors.Descriptor;
-import cz.cuni.mff.hurkovalu.flocksim.descriptors.IntFieldDescriptor;
+import cz.cuni.mff.hurkovalu.flocksim.spi.AgentInfo;
+import cz.cuni.mff.hurkovalu.flocksim.spi.Parameters;
+import cz.cuni.mff.hurkovalu.flocksim.spi.FlockModel;
+import cz.cuni.mff.hurkovalu.flocksim.spi.descriptors.ComboBoxDescriptor;
+import cz.cuni.mff.hurkovalu.flocksim.spi.descriptors.Descriptor;
+import cz.cuni.mff.hurkovalu.flocksim.spi.descriptors.IntFieldDescriptor;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;

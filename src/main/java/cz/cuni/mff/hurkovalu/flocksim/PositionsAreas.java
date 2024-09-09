@@ -4,6 +4,7 @@
  */
 package cz.cuni.mff.hurkovalu.flocksim;
 
+import cz.cuni.mff.hurkovalu.flocksim.spi.AgentInfo;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -4,7 +4,7 @@
  */
 package cz.cuni.mff.hurkovalu.flocksim.settings;
 
-import cz.cuni.mff.hurkovalu.flocksim.descriptors.SliderDescriptor;
+import cz.cuni.mff.hurkovalu.flocksim.spi.descriptors.SliderDescriptor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.Dictionary;

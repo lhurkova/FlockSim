@@ -4,7 +4,7 @@
  */
 package cz.cuni.mff.hurkovalu.flocksim.settings;
 
-import cz.cuni.mff.hurkovalu.flocksim.descriptors.IntFieldDescriptor;
+import cz.cuni.mff.hurkovalu.flocksim.spi.descriptors.IntFieldDescriptor;
 import java.awt.Color;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;

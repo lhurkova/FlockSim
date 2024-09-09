@@ -2,35 +2,37 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cz.cuni.mff.hurkovalu.flocksim.descriptors;
+package cz.cuni.mff.hurkovalu.flocksim.spi.descriptors;
 
 /**
  * Class for a description of a simulation parameter that in GUI will be implemented with
- * a JSlider.
+ * a JTextFiel. The JTextField will only allow integer values in a specified range.
  * @author Lucie Hurkova
  */
-public class SliderDescriptor extends Descriptor {
+public class IntFieldDescriptor extends Descriptor {
     
     private int min;
     private int max;
     private int defaultValue;
     
     /**
-     * Creates a new {@link SliderDescriptor} with a short description, minimum,
+     * Creates a new {@link IntFieldDescriptor} with a short description, minimum,
      * maximum and default value.
      * @param description short description of the parameter
      * @param min minimum value of the parameter
      * @param max maximum value of the parameter
      * @param defaultValue default value of the parameter
-     * @throws IllegalArgumentException if default value is out of bound
-     * for range [min, max]
+     * @throws IllegalArgumentException if min is greater than max or default value
+     * is out of bound for range [min, max]
      */
-    public SliderDescriptor(String description, int min, int max,
-            int defaultValue) throws IllegalArgumentException{
-        super(description, Type.SLIDER);
-        int testMin = Math.min(min, max);
-        int testMax = Math.max(min, max);
-        if (defaultValue < testMin || defaultValue > testMax) {
+    public IntFieldDescriptor(String description, int min, int max,
+            int defaultValue) throws IllegalArgumentException {
+        super(description, Type.INT_FIELD);
+        if (min > max) {
+            throw new IllegalArgumentException("Minimum value "+min
+                    +" is greater than maximum value "+max);
+        }
+        if (defaultValue < min || defaultValue > max) {
             throw new IllegalArgumentException("Default value "+defaultValue
                     +" is out of bounds: ["+min+","+max+"]");
         }
@@ -62,5 +64,5 @@ public class SliderDescriptor extends Descriptor {
     public int getDefaultValue() {
         return defaultValue;
     }
-    
+
 }

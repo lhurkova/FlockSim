@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cz.cuni.mff.hurkovalu.flocksim.descriptors;
+package cz.cuni.mff.hurkovalu.flocksim.spi.descriptors;
 
 /**
  * Abstract class for a description of a simulation parameter.

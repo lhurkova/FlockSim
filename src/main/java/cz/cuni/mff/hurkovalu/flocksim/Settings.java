@@ -4,8 +4,10 @@
  */
 package cz.cuni.mff.hurkovalu.flocksim;
 
+import cz.cuni.mff.hurkovalu.flocksim.spi.Parameters;
+import cz.cuni.mff.hurkovalu.flocksim.spi.FlockModel;
 import cz.cuni.mff.hurkovalu.flocksim.settings.SettingsItem;
-import cz.cuni.mff.hurkovalu.flocksim.descriptors.Descriptor;
+import cz.cuni.mff.hurkovalu.flocksim.spi.descriptors.Descriptor;
 import cz.cuni.mff.hurkovalu.flocksim.settings.Savable;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;

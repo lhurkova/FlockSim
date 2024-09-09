@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package cz.cuni.mff.hurkovalu.flocksim.settings;
-import cz.cuni.mff.hurkovalu.flocksim.descriptors.ComboBoxDescriptor;
+import cz.cuni.mff.hurkovalu.flocksim.spi.descriptors.ComboBoxDescriptor;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;

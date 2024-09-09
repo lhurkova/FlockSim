@@ -4,6 +4,11 @@
  */
 package cz.cuni.mff.hurkovalu.flocksim;
 
+import cz.cuni.mff.hurkovalu.flocksim.spi.Agent;
+import cz.cuni.mff.hurkovalu.flocksim.spi.AgentInfo;
+import cz.cuni.mff.hurkovalu.flocksim.spi.Parameters;
+import cz.cuni.mff.hurkovalu.flocksim.spi.FlockModel;
+import cz.cuni.mff.hurkovalu.flocksim.spi.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -37,7 +42,7 @@ public class Flock {
      * @param flockModel flock model that determines the implementation of the agents
      * @param params simulation parameters
      */
-    public Flock(int winHeight, int winWidth, int flockMembersCount, FlockModel flockModel, Parameters params) {
+    Flock(int winHeight, int winWidth, int flockMembersCount, FlockModel flockModel, Parameters params) {
         this.winHeight = winHeight;
         this.winWidth = winWidth;
         this.params = params;
@@ -75,7 +80,7 @@ public class Flock {
      * Gets flock model that this {@link Flock} is using.
      * @return used flock model
      */
-    public FlockModel getFlockModel() {
+    FlockModel getFlockModel() {
         return flockModel;
     }
     
@@ -153,7 +158,7 @@ public class Flock {
      * Executes one step of the flocking simulation.
      * @return new information about all flock members
      */
-    public List<AgentInfo> doStep() {
+    List<AgentInfo> doStep() {
         List<AgentInfo> infos = new ArrayList<>();
         for (Agent agent: flockMembers) {
             AgentInfo info = agent.doStep();
@@ -181,7 +186,7 @@ public class Flock {
      * Gets current information about all flock members.
      * @return current information about all flock members
      */
-    public List<AgentInfo> getAgentInfos() {
+    List<AgentInfo> getAgentInfos() {
         List<AgentInfo> infos = new ArrayList<>();
         for (Agent a: flockMembers) {
             infos.add(a.getInfo());
